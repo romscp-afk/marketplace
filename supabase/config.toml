@@ -1,0 +1,10 @@
+# Supabase migrations will be added in Milestone 3.
+# 
+# Setup:
+# 1. Install Supabase CLI: npm install -g supabase
+# 2. Link project: supabase link --project-ref YOUR_PROJECT_REF
+# 3. Create migration: supabase migration new initial_schema
+# 4. Apply: supabase db push
+
+[project]
+id = "marketplace"
