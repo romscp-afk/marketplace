@@ -51,7 +51,7 @@ const SEED_ORDERS: StoredOrder[] = [
       city: "Brooklyn",
       state: "NY",
       postalCode: "11201",
-      country: "US",
+      country: "SG",
     },
     guestEmail: "customer@example.com",
     createdAt: "2025-07-30T10:00:00Z",

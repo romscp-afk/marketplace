@@ -34,7 +34,7 @@ function mapStoredOrder(row: Record<string, unknown>, subOrders: SellerSubOrder[
       city: shipping?.city ?? "",
       state: shipping?.state ?? "",
       postalCode: shipping?.postalCode ?? "",
-      country: shipping?.country ?? "US",
+      country: shipping?.country ?? "SG",
       phone: shipping?.phone,
     },
     createdAt: row.created_at as string,

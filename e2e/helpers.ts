@@ -22,12 +22,14 @@ export async function completeCheckout(page: Page) {
   await page.getByLabel("Email address").fill("e2e@example.com");
   await page.getByLabel("First name").fill("E2E");
   await page.getByLabel("Last name").fill("Tester");
+  await page.getByLabel("Phone number").fill("91234567");
   await page.getByRole("button", { name: "Continue to delivery" }).click();
 
-  await page.getByLabel("Address line 1").fill("123 Test Street");
-  await page.getByLabel("City").fill("Brooklyn");
-  await page.getByLabel("State / Province").fill("NY");
-  await page.getByLabel("Postal code").fill("11201");
+  await page.getByLabel("Address line 1").fill("123 Orchard Road");
+  await page.getByLabel("City").fill("Singapore");
+  await page.getByLabel("State / Province").fill("Central");
+  await page.getByLabel("Postal code").fill("238858");
+  await page.getByLabel("Country").selectOption("SG");
   await page.getByRole("button", { name: "Continue to shipping" }).click();
 
   await page.getByRole("button", { name: "Continue to payment" }).click();

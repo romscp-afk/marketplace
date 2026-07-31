@@ -24,7 +24,7 @@ export const brand = {
 
   contact: {
     supportEmail: "support@example.com",
-    businessAddress: "123 Commerce Street, Suite 100, Example City, EX 12345",
+    businessAddress: "1 Raffles Place, Singapore 048616",
   },
 
   social: {
@@ -35,16 +35,18 @@ export const brand = {
   },
 
   locale: {
-    default: "en-US",
-    currency: "USD",
-    country: "US",
-    timezone: "America/New_York",
+    default: "en-SG",
+    currency: "SGD",
+    country: "SG",
+    countryName: "Singapore",
+    timezone: "Asia/Singapore",
+    phoneCountryCode: "+65",
   },
 
   delivery: {
     defaultEstimateDays: { min: 3, max: 7 },
-    freeShippingThreshold: 50,
-    defaultFee: 5.99,
+    freeShippingThreshold: 70,
+    defaultFee: 7.99,
   },
 
   commission: {
@@ -56,31 +58,32 @@ export const brand = {
     windowDays: 30,
   },
 
+  /** UXguard brand palette — teal #0eb5bd · navy #001334 */
   theme: {
     colors: {
-      primary: "#0B5D4B",
-      primaryDark: "#073D33",
-      background: "#FAF8F3",
+      primary: "#0EB5BD",
+      primaryDark: "#0C9AA1",
+      background: "#F4F7FB",
       surface: "#FFFFFF",
-      accent: "#C9A45C",
+      accent: "#3ECED4",
       promotional: "#DF654B",
-      text: "#18201E",
-      textSecondary: "#66736F",
-      border: "#E6E2D9",
-      success: "#16865C",
+      text: "#001334",
+      textSecondary: "#5A7390",
+      border: "#E8EEF6",
+      success: "#0C9AA1",
       warning: "#D68A18",
       error: "#C43D4B",
     },
   },
 
   pwa: {
-    themeColor: "#0B5D4B",
-    backgroundColor: "#FAF8F3",
+    themeColor: "#0EB5BD",
+    backgroundColor: "#F4F7FB",
   },
 
   announcement: {
     enabled: true,
-    message: "Free delivery on orders over $50 — shop curated collections today",
+    message: "Free delivery on orders over $70 — shop curated collections today",
     link: "/search?sort=deals",
     linkText: "Shop deals",
   },

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, DM_Sans } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import { brand } from "@/config/brand";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { Header } from "@/components/layout/header";
@@ -17,7 +17,7 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   display: "swap",
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang={brand.locale.default.split("-")[0]}>
       <body
-        className={`${fraunces.variable} ${dmSans.variable} flex min-h-screen flex-col antialiased`}
+        className={`${fraunces.variable} ${inter.variable} flex min-h-screen flex-col antialiased`}
       >
         <CartProvider>
           <WishlistProvider>

@@ -97,7 +97,7 @@ export function Header() {
               aria-label="Delivery location"
             >
               <MapPin className="h-4 w-4" aria-hidden="true" />
-              <span>{brand.locale.country}</span>
+              <span>{brand.locale.countryName}</span>
             </button>
 
             <Link

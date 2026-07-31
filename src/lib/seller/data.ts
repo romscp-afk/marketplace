@@ -202,7 +202,7 @@ export async function getSellerOrderDetail(
       city: address.city ?? "",
       state: address.state ?? "",
       postalCode: address.postalCode ?? address.postal_code ?? "",
-      country: address.country ?? "US",
+      country: address.country ?? "SG",
     },
   };
 }

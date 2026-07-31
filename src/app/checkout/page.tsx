@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Check } from "lucide-react";
@@ -12,6 +12,14 @@ import { brand } from "@/config/brand";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { PhoneInput } from "@/components/ui/phone-input";
+import {
+  getCountrySelectOptions,
+  getCountryName,
+  getPhoneCodeSelectOptions,
+  formatPhoneNumber,
+} from "@/data/countries";
 import { analytics } from "@/lib/analytics";
 import { placeOrder } from "@/lib/commerce/actions";
 
@@ -27,6 +35,7 @@ const contactSchema = z.object({
   email: z.string().email("Valid email required"),
   firstName: z.string().min(1, "First name required"),
   lastName: z.string().min(1, "Last name required"),
+  phoneCountryCode: z.string().min(1, "Country code required"),
   phone: z.string().optional(),
 });
 
@@ -59,7 +68,13 @@ export default function CheckoutPage() {
 
   const contactForm = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
+    defaultValues: {
+      phoneCountryCode: brand.locale.phoneCountryCode,
+    },
   });
+
+  const countryOptions = getCountrySelectOptions(brand.locale.country);
+  const phoneCodeOptions = getPhoneCodeSelectOptions(brand.locale.country);
 
   const addressForm = useForm<AddressForm>({
     resolver: zodResolver(addressSchema),
@@ -126,7 +141,9 @@ export default function CheckoutPage() {
           ...addressData,
           firstName: contactData.firstName,
           lastName: contactData.lastName,
-          phone: contactData.phone,
+          phone: contactData.phone
+            ? formatPhoneNumber(contactData.phoneCountryCode, contactData.phone)
+            : undefined,
         },
         shippingMethod,
         subtotal,
@@ -211,10 +228,17 @@ export default function CheckoutPage() {
                   {...contactForm.register("lastName")}
                 />
               </div>
-              <Input
+              <PhoneInput
                 label="Phone number"
-                type="tel"
                 hint="Optional — for delivery updates"
+                countryCodeName="phoneCountryCode"
+                countryCodeValue={contactForm.watch("phoneCountryCode")}
+                onCountryCodeChange={(value) =>
+                  contactForm.setValue("phoneCountryCode", value, { shouldValidate: true })
+                }
+                countryCodeOptions={phoneCodeOptions}
+                countryCodeError={contactForm.formState.errors.phoneCountryCode?.message}
+                error={contactForm.formState.errors.phone?.message}
                 {...contactForm.register("phone")}
               />
               <Button type="submit" fullWidth>
@@ -258,12 +282,19 @@ export default function CheckoutPage() {
                   error={addressForm.formState.errors.postalCode?.message}
                   {...addressForm.register("postalCode")}
                 />
-                <Input
-                  label="Country"
-                  required
-                  error={addressForm.formState.errors.country?.message}
-                  {...addressForm.register("country")}
-                />
+              <Controller
+                name="country"
+                control={addressForm.control}
+                render={({ field }) => (
+                  <Select
+                    label="Country"
+                    required
+                    options={countryOptions}
+                    error={addressForm.formState.errors.country?.message}
+                    {...field}
+                  />
+                )}
+              />
               </div>
               <div className="flex gap-3">
                 <Button type="button" variant="secondary" onClick={() => setCurrentStep(0)}>
@@ -371,6 +402,9 @@ export default function CheckoutPage() {
                   <p className="font-medium">Contact</p>
                   <p className="text-muted">
                     {contactData.firstName} {contactData.lastName} · {contactData.email}
+                    {contactData.phone
+                      ? ` · ${formatPhoneNumber(contactData.phoneCountryCode, contactData.phone)}`
+                      : ""}
                   </p>
                 </div>
               ) : null}
@@ -379,7 +413,7 @@ export default function CheckoutPage() {
                   <p className="font-medium">Delivery to</p>
                   <p className="text-muted">
                     {addressData.line1}, {addressData.city}, {addressData.state}{" "}
-                    {addressData.postalCode}
+                    {addressData.postalCode}, {getCountryName(addressData.country)}
                   </p>
                 </div>
               ) : null}

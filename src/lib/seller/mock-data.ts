@@ -246,7 +246,7 @@ export function getMockOrder(subOrderId: string): SellerOrderDetail | undefined 
       city: "Portland",
       state: "OR",
       postalCode: "97201",
-      country: "US",
+      country: "SG",
     },
   };
 }

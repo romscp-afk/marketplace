@@ -48,12 +48,23 @@ function parseEnv<T extends z.ZodTypeAny>(
   return schema.parse({});
 }
 
+/** Vercel Supabase integration may inject unprefixed SUPABASE_* vars */
+function resolveSupabaseUrl(): string | undefined {
+  return emptyToUndefined(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL,
+  );
+}
+
+function resolveSupabaseAnonKey(): string | undefined {
+  return emptyToUndefined(
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY,
+  );
+}
+
 export const publicEnv = parseEnv(publicEnvSchema, {
   NEXT_PUBLIC_APP_URL: emptyToUndefined(process.env.NEXT_PUBLIC_APP_URL),
-  NEXT_PUBLIC_SUPABASE_URL: emptyToUndefined(process.env.NEXT_PUBLIC_SUPABASE_URL),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: emptyToUndefined(
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-  ),
+  NEXT_PUBLIC_SUPABASE_URL: resolveSupabaseUrl(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: resolveSupabaseAnonKey(),
   NEXT_PUBLIC_ANALYTICS_PROVIDER: emptyToUndefined(
     process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER,
   ),

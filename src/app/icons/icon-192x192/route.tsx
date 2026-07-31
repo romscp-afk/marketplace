@@ -10,7 +10,7 @@ export async function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0B5D4B",
+          background: "#0EB5BD",
           borderRadius: 32,
         }}
       >
@@ -22,9 +22,9 @@ export async function GET() {
             alignItems: "center",
           }}
         >
-          <div style={{ width: 80, height: 8, background: "#FAF8F3", borderRadius: 4 }} />
-          <div style={{ width: 64, height: 8, background: "#FAF8F3", borderRadius: 4 }} />
-          <div style={{ width: 48, height: 8, background: "#FAF8F3", borderRadius: 4 }} />
+          <div style={{ width: 80, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
+          <div style={{ width: 64, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
+          <div style={{ width: 48, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
         </div>
       </div>
     ),
