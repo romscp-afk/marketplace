@@ -8,6 +8,7 @@ import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { PwaInstallPrompt } from "@/components/pwa/install-prompt";
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
 import { CartProvider } from "@/contexts/cart-context";
+import { CartFeedbackProvider } from "@/components/commerce/cart-feedback";
 import { WishlistProvider } from "@/contexts/wishlist-context";
 import "./globals.css";
 
@@ -44,6 +45,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   manifest: "/manifest.json",
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({
@@ -57,15 +61,17 @@ export default function RootLayout({
         className={`${fraunces.variable} ${inter.variable} flex min-h-screen flex-col antialiased`}
       >
         <CartProvider>
-          <WishlistProvider>
-            <AnnouncementBar />
-            <Header />
-            <main className="flex-1 pb-16 md:pb-0">{children}</main>
-            <Footer />
-            <MobileBottomNav />
-            <PwaInstallPrompt />
-            <ServiceWorkerRegistration />
-          </WishlistProvider>
+          <CartFeedbackProvider>
+            <WishlistProvider>
+              <AnnouncementBar />
+              <Header />
+              <main className="flex-1 pb-16 md:pb-0">{children}</main>
+              <Footer />
+              <MobileBottomNav />
+              <PwaInstallPrompt />
+              <ServiceWorkerRegistration />
+            </WishlistProvider>
+          </CartFeedbackProvider>
         </CartProvider>
       </body>
     </html>

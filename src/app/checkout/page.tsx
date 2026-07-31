@@ -73,7 +73,9 @@ export default function CheckoutPage() {
     },
   });
 
-  const countryOptions = getCountrySelectOptions(brand.locale.country);
+  const countryOptions = getCountrySelectOptions(brand.locale.country, [
+    ...brand.locale.deliveryCountries,
+  ]);
   const phoneCodeOptions = getPhoneCodeSelectOptions(brand.locale.country);
 
   const addressForm = useForm<AddressForm>({
@@ -250,6 +252,10 @@ export default function CheckoutPage() {
           {currentStep === 1 ? (
             <form onSubmit={handleAddressSubmit} className="space-y-4">
               <h2 className="text-lg font-semibold">Delivery address</h2>
+              <p className="text-muted text-sm">
+                Delivery is currently available within {brand.locale.countryName} only. All prices
+                are shown in {brand.locale.currency}.
+              </p>
               <Input
                 label="Address line 1"
                 required

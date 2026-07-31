@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
+import { SafeImage } from "@/components/ui/safe-image";
+import { productImageUrl } from "@/lib/images";
 import { ArrowRight, Truck, Shield, RotateCcw, Award } from "lucide-react";
 import { brand } from "@/config/brand";
 import { ProductCard } from "@/components/product/product-card";
@@ -18,7 +19,7 @@ const trustBenefits = [
   {
     icon: Truck,
     title: "Free delivery",
-    description: `On orders over $${brand.delivery.freeShippingThreshold}`,
+    description: `On Singapore orders over S$${brand.delivery.freeShippingThreshold}`,
   },
   {
     icon: Shield,
@@ -38,13 +39,14 @@ const trustBenefits = [
 ];
 
 export default async function HomePage() {
-  const [featured, trending, newArrivals, deals, categories] = await Promise.all([
-    getFeaturedProducts(),
-    getTrendingProducts(),
-    getNewArrivals(),
-    getDeals(),
-    getCategories(),
-  ]);
+  const featured = await getFeaturedProducts();
+  const featuredIds = featured.map((p) => p.id);
+  const trending = await getTrendingProducts(featuredIds);
+  const trendingIds = [...featuredIds, ...trending.map((p) => p.id)];
+  const newArrivals = await getNewArrivals(trendingIds);
+  const dealExclude = [...trendingIds, ...newArrivals.map((p) => p.id)];
+  const deals = await getDeals(dealExclude);
+  const categories = await getCategories();
 
   return (
     <>
@@ -56,7 +58,7 @@ export default async function HomePage() {
               Discover premium products from trusted sellers
             </h1>
             <p className="text-primary-foreground/80 mt-4 text-lg">
-              {brand.tagline}. Shop curated collections with confidence.
+              Curated products from independent sellers — priced in SGD, delivered across Singapore.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -91,16 +93,14 @@ export default async function HomePage() {
                 href={`/categories/${cat.slug}`}
                 className="group overflow-hidden rounded-xl bg-surface shadow-sm transition-shadow hover:shadow-md"
               >
-                <div className="relative aspect-square">
-                  {cat.imageUrl ? (
-                    <Image
-                      src={cat.imageUrl}
-                      alt={cat.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, 16vw"
-                      className="object-cover transition-transform group-hover:scale-105"
-                    />
-                  ) : null}
+                <div className="relative aspect-square bg-background">
+                  <SafeImage
+                    src={cat.imageUrl ?? "/images/placeholder-product.svg"}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 50vw, 16vw"
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
                 </div>
                 <p className="p-3 text-center text-sm font-medium">{cat.name}</p>
               </Link>
@@ -132,9 +132,9 @@ export default async function HomePage() {
               className="bg-surface flex items-center gap-4 rounded-xl border border-border p-4 transition-shadow hover:shadow-md"
             >
               {seller.logoUrl ? (
-                <Image
-                  src={seller.logoUrl}
-                  alt={seller.storeName}
+                <SafeImage
+                  src={productImageUrl(`seller-${seller.slug}`, 112, 112)}
+                  alt=""
                   width={56}
                   height={56}
                   className="rounded-full object-cover"
@@ -179,7 +179,7 @@ export default async function HomePage() {
           Start selling on {brand.name}
         </h2>
         <p className="text-muted mx-auto mt-3 max-w-lg text-sm">
-          Join our community of independent sellers. Reach customers nationwide with our
+          Join our community of independent sellers. Reach customers across Singapore with our
           easy-to-use seller portal.
         </p>
         <Link

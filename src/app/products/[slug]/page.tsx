@@ -5,7 +5,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from "@/lib/data/products";
-import { getReviewsForProduct } from "@/data/seed";
+import { getReviewsForProduct, getProductReviewStats } from "@/data/seed";
 import { formatCurrency } from "@/lib/utils";
 import { Rating } from "@/components/ui/rating";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const related = await getRelatedProducts(product);
   const reviews = getReviewsForProduct(product.id);
+  const reviewStats = getProductReviewStats(product.id);
+  const displayReviewCount = reviewStats.count;
+  const displayRating = reviewStats.count > 0 ? reviewStats.average : product.rating;
   const hasDiscount =
     product.compareAtPrice && product.compareAtPrice > product.price;
 
@@ -62,11 +65,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: product.rating,
-      reviewCount: product.reviewCount,
-    },
+    ...(displayReviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: displayRating,
+            reviewCount: displayReviewCount,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -122,8 +129,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             <Rating
-              rating={product.rating}
-              reviewCount={product.reviewCount}
+              rating={displayRating}
+              reviewCount={displayReviewCount}
               showValue
               size="md"
               className="mt-3"
@@ -216,11 +223,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Reviews */}
         <section className="mt-12" aria-labelledby="reviews-heading">
           <h2 id="reviews-heading" className="mb-6 text-lg font-semibold">
-            Customer reviews ({reviews.length})
+            Customer reviews ({displayReviewCount})
           </h2>
           {reviews.length === 0 ? (
             <p className="text-muted text-sm">No reviews yet. Be the first to review!</p>
           ) : (
+            <>
+              <p className="text-muted mb-4 text-sm">
+                Showing {reviews.length} of {displayReviewCount} review
+                {displayReviewCount === 1 ? "" : "s"}
+              </p>
             <div className="space-y-4">
               {reviews.map((review) => (
                 <article
@@ -243,6 +255,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </article>
               ))}
             </div>
+            </>
           )}
         </section>
 

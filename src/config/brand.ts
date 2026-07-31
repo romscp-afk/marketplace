@@ -23,7 +23,7 @@ export const brand = {
   },
 
   contact: {
-    supportEmail: "support@example.com",
+    supportEmail: "hello@uxguard.studio",
     businessAddress: "1 Raffles Place, Singapore 048616",
   },
 
@@ -46,6 +46,8 @@ export const brand = {
     countryName: "Singapore",
     timezone: "Asia/Singapore",
     phoneCountryCode: "+65",
+    /** Launch market — delivery available to these countries only */
+    deliveryCountries: ["SG"] as const,
   },
 
   delivery: {
@@ -88,7 +90,7 @@ export const brand = {
 
   announcement: {
     enabled: true,
-    message: "Free delivery on orders over $70 — shop curated collections today",
+    message: "Free delivery on orders over S$70 — shop curated collections today",
     link: "/search?sort=deals",
     linkText: "Shop deals",
   },

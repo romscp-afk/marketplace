@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Product, ProductVariant } from "@/types";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
+import { useCartFeedback } from "@/components/commerce/cart-feedback";
 import { Button } from "@/components/ui/button";
 import { trackPwaEngagement } from "@/components/pwa/install-prompt";
 import { clamp } from "@/lib/utils";
@@ -16,10 +17,12 @@ interface ProductActionsProps {
 export function ProductActions({ product }: ProductActionsProps) {
   const router = useRouter();
   const { addItem } = useCart();
+  const { showAddedToCart } = useCartFeedback();
   const { isInWishlist, toggleWishlist } = useWishlist();
 
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | undefined>();
   const [quantity, setQuantity] = useState(1);
+  const [adding, setAdding] = useState(false);
 
   const hasVariants = product.variants && product.variants.length > 0;
   const availableStock = selectedVariant?.stock ?? product.stock;
@@ -32,9 +35,12 @@ export function ProductActions({ product }: ProductActionsProps) {
     : [];
 
   const handleAddToCart = () => {
-    if (!canPurchase) return;
+    if (!canPurchase || adding) return;
+    setAdding(true);
     addItem(product, selectedVariant, quantity);
+    showAddedToCart(product.title);
     trackPwaEngagement();
+    window.setTimeout(() => setAdding(false), 600);
   };
 
   const handleBuyNow = () => {
@@ -129,7 +135,8 @@ export function ProductActions({ product }: ProductActionsProps) {
         <Button
           fullWidth
           onClick={handleAddToCart}
-          disabled={!canPurchase}
+          disabled={!canPurchase || adding}
+          isLoading={adding}
         >
           Add to Cart
         </Button>

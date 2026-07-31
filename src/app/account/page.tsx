@@ -80,9 +80,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
               <>
                 <h2 className="text-lg font-semibold">Welcome</h2>
                 <p className="text-muted mt-2 text-sm">
-                  {isSupabaseConfigured()
-                    ? "Sign in to access your orders, wishlist, and account settings."
-                    : "Authentication will activate once Supabase credentials are added to .env.local."}
+                  Sign in to access your orders, wishlist, saved addresses, and account settings.
                 </p>
                 <div className="mt-6 flex gap-3">
                   <Link

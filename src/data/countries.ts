@@ -1027,11 +1027,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Algeria"
   },
   {
-    "countryCode": "AS",
-    "dialCode": "+65",
-    "name": "American Samoa"
-  },
-  {
     "countryCode": "AD",
     "dialCode": "+376",
     "name": "Andorra"
@@ -1042,19 +1037,9 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Angola"
   },
   {
-    "countryCode": "AI",
-    "dialCode": "+65",
-    "name": "Anguilla"
-  },
-  {
     "countryCode": "AQ",
     "dialCode": "+672",
     "name": "Antarctica"
-  },
-  {
-    "countryCode": "AG",
-    "dialCode": "+65",
-    "name": "Antigua & Barbuda"
   },
   {
     "countryCode": "AR",
@@ -1087,11 +1072,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Azerbaijan"
   },
   {
-    "countryCode": "BS",
-    "dialCode": "+65",
-    "name": "Bahamas"
-  },
-  {
     "countryCode": "BH",
     "dialCode": "+973",
     "name": "Bahrain"
@@ -1100,11 +1080,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "BD",
     "dialCode": "+880",
     "name": "Bangladesh"
-  },
-  {
-    "countryCode": "BB",
-    "dialCode": "+65",
-    "name": "Barbados"
   },
   {
     "countryCode": "BY",
@@ -1125,11 +1100,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "BJ",
     "dialCode": "+229",
     "name": "Benin"
-  },
-  {
-    "countryCode": "BM",
-    "dialCode": "+65",
-    "name": "Bermuda"
   },
   {
     "countryCode": "BT",
@@ -1153,7 +1123,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "BV",
-    "dialCode": "+65",
+    "dialCode": "+47",
     "name": "Bouvet Island"
   },
   {
@@ -1163,13 +1133,8 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "IO",
-    "dialCode": "+65",
+    "dialCode": "+246",
     "name": "British Indian Ocean Territory"
-  },
-  {
-    "countryCode": "VG",
-    "dialCode": "+65",
-    "name": "British Virgin Islands"
   },
   {
     "countryCode": "BN",
@@ -1215,11 +1180,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "BQ",
     "dialCode": "+599",
     "name": "Caribbean Netherlands"
-  },
-  {
-    "countryCode": "KY",
-    "dialCode": "+65",
-    "name": "Cayman Islands"
   },
   {
     "countryCode": "CF",
@@ -1298,7 +1258,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "CW",
-    "dialCode": "+65",
+    "dialCode": "+599",
     "name": "Curaçao"
   },
   {
@@ -1320,16 +1280,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "DJ",
     "dialCode": "+253",
     "name": "Djibouti"
-  },
-  {
-    "countryCode": "DM",
-    "dialCode": "+65",
-    "name": "Dominica"
-  },
-  {
-    "countryCode": "DO",
-    "dialCode": "+65",
-    "name": "Dominican Republic"
   },
   {
     "countryCode": "EC",
@@ -1408,7 +1358,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "TF",
-    "dialCode": "+65",
+    "dialCode": "+262",
     "name": "French Southern Territories"
   },
   {
@@ -1452,19 +1402,9 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Greenland"
   },
   {
-    "countryCode": "GD",
-    "dialCode": "+65",
-    "name": "Grenada"
-  },
-  {
     "countryCode": "GP",
     "dialCode": "+590",
     "name": "Guadeloupe"
-  },
-  {
-    "countryCode": "GU",
-    "dialCode": "+65",
-    "name": "Guam"
   },
   {
     "countryCode": "GT",
@@ -1498,7 +1438,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "HM",
-    "dialCode": "+65",
+    "dialCode": "+672",
     "name": "Heard & McDonald Islands"
   },
   {
@@ -1560,11 +1500,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "IT",
     "dialCode": "+39",
     "name": "Italy"
-  },
-  {
-    "countryCode": "JM",
-    "dialCode": "+65",
-    "name": "Jamaica"
   },
   {
     "countryCode": "JP",
@@ -1742,11 +1677,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Montenegro"
   },
   {
-    "countryCode": "MS",
-    "dialCode": "+65",
-    "name": "Montserrat"
-  },
-  {
     "countryCode": "MA",
     "dialCode": "+212",
     "name": "Morocco"
@@ -1825,11 +1755,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "MK",
     "dialCode": "+389",
     "name": "North Macedonia"
-  },
-  {
-    "countryCode": "MP",
-    "dialCode": "+65",
-    "name": "Northern Mariana Islands"
   },
   {
     "countryCode": "NO",
@@ -1952,11 +1877,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Senegal"
   },
   {
-    "countryCode": "RS",
-    "dialCode": "+65",
-    "name": "Serbia"
-  },
-  {
     "countryCode": "SC",
     "dialCode": "+248",
     "name": "Seychelles"
@@ -1998,7 +1918,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "GS",
-    "dialCode": "+65",
+    "dialCode": "+500",
     "name": "South Georgia & South Sandwich Islands"
   },
   {
@@ -2008,7 +1928,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "SS",
-    "dialCode": "+65",
+    "dialCode": "+211",
     "name": "South Sudan"
   },
   {
@@ -2023,38 +1943,18 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "BL",
-    "dialCode": "+65",
+    "dialCode": "+590",
     "name": "St. Barthélemy"
   },
   {
-    "countryCode": "SH",
-    "dialCode": "+65",
-    "name": "St. Helena"
-  },
-  {
-    "countryCode": "KN",
-    "dialCode": "+65",
-    "name": "St. Kitts & Nevis"
-  },
-  {
-    "countryCode": "LC",
-    "dialCode": "+65",
-    "name": "St. Lucia"
-  },
-  {
     "countryCode": "MF",
-    "dialCode": "+65",
+    "dialCode": "+590",
     "name": "St. Martin"
   },
   {
     "countryCode": "PM",
     "dialCode": "+508",
     "name": "St. Pierre & Miquelon"
-  },
-  {
-    "countryCode": "VC",
-    "dialCode": "+65",
-    "name": "St. Vincent & Grenadines"
   },
   {
     "countryCode": "SD",
@@ -2068,7 +1968,7 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
   },
   {
     "countryCode": "SJ",
-    "dialCode": "+65",
+    "dialCode": "+47",
     "name": "Svalbard & Jan Mayen"
   },
   {
@@ -2127,11 +2027,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Tonga"
   },
   {
-    "countryCode": "TT",
-    "dialCode": "+65",
-    "name": "Trinidad & Tobago"
-  },
-  {
     "countryCode": "TN",
     "dialCode": "+216",
     "name": "Tunisia"
@@ -2147,24 +2042,9 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "name": "Turkmenistan"
   },
   {
-    "countryCode": "TC",
-    "dialCode": "+65",
-    "name": "Turks & Caicos Islands"
-  },
-  {
     "countryCode": "TV",
     "dialCode": "+688",
     "name": "Tuvalu"
-  },
-  {
-    "countryCode": "UM",
-    "dialCode": "+65",
-    "name": "U.S. Outlying Islands"
-  },
-  {
-    "countryCode": "VI",
-    "dialCode": "+65",
-    "name": "U.S. Virgin Islands"
   },
   {
     "countryCode": "UG",
@@ -2205,11 +2085,6 @@ export const phoneCountryCodes: PhoneCountryCode[] = [
     "countryCode": "VU",
     "dialCode": "+678",
     "name": "Vanuatu"
-  },
-  {
-    "countryCode": "VA",
-    "dialCode": "+65",
-    "name": "Vatican City"
   },
   {
     "countryCode": "VE",
@@ -2262,9 +2137,12 @@ export function formatPhoneNumber(dialCode: string, localNumber: string): string
   return `${dialCode} ${digits}`;
 }
 
-export function getCountrySelectOptions(defaultCode: string) {
-  const rest = countries.filter((c) => c.code !== defaultCode);
-  const preferred = countries.find((c) => c.code === defaultCode);
+export function getCountrySelectOptions(defaultCode: string, allowedCodes?: string[]) {
+  const pool = allowedCodes
+    ? countries.filter((c) => allowedCodes.includes(c.code))
+    : countries;
+  const rest = pool.filter((c) => c.code !== defaultCode);
+  const preferred = pool.find((c) => c.code === defaultCode);
   const options = rest.map((c) => ({ value: c.code, label: c.name }));
   if (preferred) {
     return [{ value: preferred.code, label: `${preferred.name} (default)` }, ...options];
@@ -2273,18 +2151,20 @@ export function getCountrySelectOptions(defaultCode: string) {
 }
 
 export function getPhoneCodeSelectOptions(defaultCountryCode: string) {
-  const rest = phoneCountryCodes.filter((c) => c.countryCode !== defaultCountryCode);
+  const byDial = new Map<string, PhoneCountryCode>();
+  for (const entry of phoneCountryCodes) {
+    if (!byDial.has(entry.dialCode)) byDial.set(entry.dialCode, entry);
+  }
+  const unique = [...byDial.values()].sort((a, b) => a.name.localeCompare(b.name));
   const preferred = phoneCountryCodes.find((c) => c.countryCode === defaultCountryCode);
+  const rest = unique.filter((c) => c.dialCode !== preferred?.dialCode);
   const options = rest.map((c) => ({
     value: c.dialCode,
     label: `${c.dialCode} ${c.name}`,
   }));
   if (preferred) {
     return [
-      {
-        value: preferred.dialCode,
-        label: `${preferred.dialCode} ${preferred.name} (default)`,
-      },
+      { value: preferred.dialCode, label: `${preferred.dialCode} ${preferred.name} (default)` },
       ...options,
     ];
   }

@@ -5,10 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+import { brand } from "@/config/brand";
+
 export function formatCurrency(
   amount: number,
-  currency = "USD",
-  locale = "en-US",
+  currency: string = brand.locale.currency,
+  locale: string = brand.locale.default,
 ): string {
   return new Intl.NumberFormat(locale, {
     style: "currency",

@@ -1,6 +1,5 @@
 import type { Category, Product, Review, Seller } from "@/types";
-
-const IMAGE_BASE = "https://images.unsplash.com";
+import { categoryImageUrl, productImageUrl } from "@/lib/images";
 
 export const seedCategories: Category[] = [
   {
@@ -8,42 +7,42 @@ export const seedCategories: Category[] = [
     name: "Fashion",
     slug: "fashion",
     description: "Curated apparel and accessories",
-    imageUrl: `${IMAGE_BASE}/photo-1445205170230-053b83016050?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("fashion"),
   },
   {
     id: "cat-home",
     name: "Home & Living",
     slug: "home-living",
     description: "Elevate your living space",
-    imageUrl: `${IMAGE_BASE}/photo-1616046220565-338952a68964?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("home-living"),
   },
   {
     id: "cat-beauty",
     name: "Beauty",
     slug: "beauty",
     description: "Premium skincare and cosmetics",
-    imageUrl: `${IMAGE_BASE}/photo-1596462502278-27bfd4033486?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("beauty"),
   },
   {
     id: "cat-electronics",
     name: "Electronics",
     slug: "electronics",
     description: "Modern tech essentials",
-    imageUrl: `${IMAGE_BASE}/photo-1498049794561-7780e7231661?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("electronics"),
   },
   {
     id: "cat-food",
     name: "Food & Gourmet",
     slug: "food-gourmet",
     description: "Artisan foods and beverages",
-    imageUrl: `${IMAGE_BASE}/photo-1542838132-92c53300491e?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("food-gourmet"),
   },
   {
     id: "cat-jewelry",
     name: "Jewelry",
     slug: "jewelry",
     description: "Handcrafted fine jewelry",
-    imageUrl: `${IMAGE_BASE}/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop`,
+    imageUrl: categoryImageUrl("jewelry"),
   },
 ];
 
@@ -53,7 +52,7 @@ export const seedSellers: Seller[] = [
     storeName: "Artisan Collective",
     slug: "artisan-collective",
     description: "Handcrafted goods from independent makers",
-    logoUrl: `${IMAGE_BASE}/photo-1560472354-b33ff0c44a43?w=100&h=100&fit=crop`,
+    logoUrl: productImageUrl("seller-jewelry", 100, 100),
     rating: 4.8,
     reviewCount: 342,
     productCount: 12,
@@ -64,7 +63,7 @@ export const seedSellers: Seller[] = [
     storeName: "Modern Living Co.",
     slug: "modern-living-co",
     description: "Contemporary home essentials",
-    logoUrl: `${IMAGE_BASE}/photo-1560179707-f14e90ef3623?w=100&h=100&fit=crop`,
+    logoUrl: productImageUrl("seller-modern-living-co", 100, 100),
     rating: 4.6,
     reviewCount: 218,
     productCount: 8,
@@ -75,7 +74,7 @@ export const seedSellers: Seller[] = [
     storeName: "Pure Botanicals",
     slug: "pure-botanicals",
     description: "Natural beauty and wellness products",
-    logoUrl: `${IMAGE_BASE}/photo-1556228720-195a672e8a03?w=100&h=100&fit=crop`,
+    logoUrl: productImageUrl("seller-pure-botanicals", 100, 100),
     rating: 4.9,
     reviewCount: 567,
     productCount: 10,
@@ -86,7 +85,7 @@ export const seedSellers: Seller[] = [
     storeName: "Tech Haven",
     slug: "tech-haven",
     description: "Premium electronics and accessories",
-    logoUrl: `${IMAGE_BASE}/photo-1563013547-824ae1b704d3?w=100&h=100&fit=crop`,
+    logoUrl: productImageUrl("seller-tech-haven", 100, 100),
     rating: 4.5,
     reviewCount: 189,
     productCount: 6,
@@ -97,7 +96,7 @@ export const seedSellers: Seller[] = [
     storeName: "Gourmet Pantry",
     slug: "gourmet-pantry",
     description: "Artisan foods from around the world",
-    logoUrl: `${IMAGE_BASE}/photo-1556910103-1c02745aae4d?w=100&h=100&fit=crop`,
+    logoUrl: productImageUrl("seller-gourmet-pantry", 100, 100),
     rating: 4.7,
     reviewCount: 423,
     productCount: 8,
@@ -111,11 +110,17 @@ function createProduct(
   const seller = seedSellers.find((s) => s.id === overrides.sellerId)!;
   const category = seedCategories.find((c) => c.id === overrides.categoryId)!;
 
+  const description =
+    overrides.description ??
+    `${overrides.title} from our ${category.name} collection. Quality materials selected for Singapore shoppers, with clear care guidance and seller-backed authenticity.`;
+  const shortDescription =
+    overrides.shortDescription ?? `${category.name} · curated for Singapore`;
+
   return {
-    description: "Premium quality product crafted with care.",
-    shortDescription: "Premium quality product",
-    currency: "USD",
-    images: [`${IMAGE_BASE}/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop`],
+    description,
+    shortDescription,
+    currency: "SGD",
+    images: overrides.images ?? [productImageUrl(overrides.slug)],
     categoryName: category.name,
     categorySlug: category.slug,
     seller: {
@@ -148,9 +153,8 @@ export const seedProducts: Product[] = [
     compareAtPrice: 120.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1596755094514-f87e34085b2c?w=600&h=600&fit=crop`],
     rating: 4.7,
-    reviewCount: 89,
+    reviewCount: 1,
     variants: [
       { id: "v1-s", productId: "prod-1", name: "Small / White", sku: "OCLS-WH-S", price: 89, stock: 10, attributes: { size: "S", color: "White" } },
       { id: "v1-m", productId: "prod-1", name: "Medium / White", sku: "OCLS-WH-M", price: 89, stock: 15, attributes: { size: "M", color: "White" } },
@@ -164,7 +168,6 @@ export const seedProducts: Product[] = [
     price: 65.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1520903920243-00d744a2ee11?w=600&h=600&fit=crop`],
     rating: 4.9,
     reviewCount: 124,
   }),
@@ -176,7 +179,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 180.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1548039257-85c1a5d0b0b0?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 67,
   }),
@@ -187,7 +189,6 @@ export const seedProducts: Product[] = [
     price: 78.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1578749552668-898577875e83?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 156,
   }),
@@ -198,7 +199,6 @@ export const seedProducts: Product[] = [
     price: 95.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1595428774223-ef52624120d2?w=600&h=600&fit=crop`],
     rating: 4.5,
     reviewCount: 43,
   }),
@@ -210,7 +210,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 55.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1584100936595-0654a7754a4d?w=600&h=600&fit=crop`],
     rating: 4.7,
     reviewCount: 98,
   }),
@@ -221,7 +220,6 @@ export const seedProducts: Product[] = [
     price: 48.0,
     sellerId: "seller-3",
     categoryId: "cat-beauty",
-    images: [`${IMAGE_BASE}/photo-1620916566398-39f1143ab7be?w=600&h=600&fit=crop`],
     rating: 4.9,
     reviewCount: 312,
   }),
@@ -233,7 +231,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 68.0,
     sellerId: "seller-3",
     categoryId: "cat-beauty",
-    images: [`${IMAGE_BASE}/photo-1556228578-0d85b1a4d571?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 245,
   }),
@@ -244,7 +241,6 @@ export const seedProducts: Product[] = [
     price: 32.0,
     sellerId: "seller-3",
     categoryId: "cat-beauty",
-    images: [`${IMAGE_BASE}/photo-1586495777740-567fb1f1358e?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 178,
   }),
@@ -256,7 +252,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 159.0,
     sellerId: "seller-4",
     categoryId: "cat-electronics",
-    images: [`${IMAGE_BASE}/photo-1590658268037-6bf12165a8df?w=600&h=600&fit=crop`],
     rating: 4.4,
     reviewCount: 89,
   }),
@@ -267,7 +262,6 @@ export const seedProducts: Product[] = [
     price: 79.0,
     sellerId: "seller-4",
     categoryId: "cat-electronics",
-    images: [`${IMAGE_BASE}/photo-1608043152269-423dbba4e7e1?w=600&h=600&fit=crop`],
     rating: 4.5,
     reviewCount: 134,
   }),
@@ -278,7 +272,6 @@ export const seedProducts: Product[] = [
     price: 35.0,
     sellerId: "seller-4",
     categoryId: "cat-electronics",
-    images: [`${IMAGE_BASE}/photo-1579586337278-3befd40fd17a?w=600&h=600&fit=crop`],
     rating: 4.3,
     reviewCount: 56,
     stock: 0,
@@ -291,7 +284,6 @@ export const seedProducts: Product[] = [
     price: 45.0,
     sellerId: "seller-5",
     categoryId: "cat-food",
-    images: [`${IMAGE_BASE}/photo-1474979266404-7eaacbcd87c5?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 201,
   }),
@@ -303,7 +295,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 28.0,
     sellerId: "seller-5",
     categoryId: "cat-food",
-    images: [`${IMAGE_BASE}/photo-1559056199-641a0ac8b55c?w=600&h=600&fit=crop`],
     rating: 4.7,
     reviewCount: 167,
   }),
@@ -314,7 +305,6 @@ export const seedProducts: Product[] = [
     price: 38.0,
     sellerId: "seller-5",
     categoryId: "cat-food",
-    images: [`${IMAGE_BASE}/photo-1548904154-3d7a388731b8?w=600&h=600&fit=crop`],
     rating: 4.9,
     reviewCount: 289,
   }),
@@ -325,7 +315,6 @@ export const seedProducts: Product[] = [
     price: 125.0,
     sellerId: "seller-1",
     categoryId: "cat-jewelry",
-    images: [`${IMAGE_BASE}/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 76,
   }),
@@ -337,7 +326,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 220.0,
     sellerId: "seller-1",
     categoryId: "cat-jewelry",
-    images: [`${IMAGE_BASE}/photo-1605100804763-247f67b3557e?w=600&h=600&fit=crop`],
     rating: 4.7,
     reviewCount: 54,
   }),
@@ -348,7 +336,6 @@ export const seedProducts: Product[] = [
     price: 110.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1631049307264-da0ec9d703b1?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 112,
   }),
@@ -360,7 +347,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 42.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1602607240969-ec763c7d7f5f?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 198,
   }),
@@ -371,7 +357,6 @@ export const seedProducts: Product[] = [
     price: 28.0,
     sellerId: "seller-3",
     categoryId: "cat-beauty",
-    images: [`${IMAGE_BASE}/photo-1556228720-195a672e8a03?w=600&h=600&fit=crop`],
     rating: 4.5,
     reviewCount: 87,
   }),
@@ -382,7 +367,6 @@ export const seedProducts: Product[] = [
     price: 98.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1594938298603-c8148c4dae35?w=600&h=600&fit=crop`],
     rating: 4.4,
     reviewCount: 63,
   }),
@@ -394,7 +378,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 165.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1434389677669-e08b4cac3105?w=600&h=600&fit=crop`],
     rating: 4.7,
     reviewCount: 145,
   }),
@@ -405,7 +388,6 @@ export const seedProducts: Product[] = [
     price: 58.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1603199506016-2a69f0a7a7a8?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 72,
   }),
@@ -416,7 +398,6 @@ export const seedProducts: Product[] = [
     price: 49.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1608571423902-eed4a5ad8108?w=600&h=600&fit=crop`],
     rating: 4.5,
     reviewCount: 91,
   }),
@@ -427,7 +408,6 @@ export const seedProducts: Product[] = [
     price: 62.0,
     sellerId: "seller-3",
     categoryId: "cat-beauty",
-    images: [`${IMAGE_BASE}/photo-1617897903246-719332784169?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 234,
   }),
@@ -439,7 +419,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 59.0,
     sellerId: "seller-4",
     categoryId: "cat-electronics",
-    images: [`${IMAGE_BASE}/photo-1625948515291-69613efd103f?w=600&h=600&fit=crop`],
     rating: 4.3,
     reviewCount: 78,
   }),
@@ -450,7 +429,6 @@ export const seedProducts: Product[] = [
     price: 149.0,
     sellerId: "seller-4",
     categoryId: "cat-electronics",
-    images: [`${IMAGE_BASE}/photo-1587829741301-dc798b83add3?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 102,
   }),
@@ -461,7 +439,6 @@ export const seedProducts: Product[] = [
     price: 24.0,
     sellerId: "seller-5",
     categoryId: "cat-food",
-    images: [`${IMAGE_BASE}/photo-1564890369478-c89ca64d6772?w=600&h=600&fit=crop`],
     rating: 4.7,
     reviewCount: 156,
   }),
@@ -472,7 +449,6 @@ export const seedProducts: Product[] = [
     price: 18.0,
     sellerId: "seller-5",
     categoryId: "cat-food",
-    images: [`${IMAGE_BASE}/photo-1587049352846-4a2227827928?w=600&h=600&fit=crop`],
     rating: 4.9,
     reviewCount: 312,
   }),
@@ -484,7 +460,6 @@ export const seedProducts: Product[] = [
     compareAtPrice: 95.0,
     sellerId: "seller-1",
     categoryId: "cat-jewelry",
-    images: [`${IMAGE_BASE}/photo-1535632066927-ab7c754de7f4?w=600&h=600&fit=crop`],
     rating: 4.8,
     reviewCount: 89,
   }),
@@ -495,7 +470,6 @@ export const seedProducts: Product[] = [
     price: 168.0,
     sellerId: "seller-1",
     categoryId: "cat-fashion",
-    images: [`${IMAGE_BASE}/photo-1595777457583-95e059d581b8?w=600&h=600&fit=crop`],
     rating: 4.6,
     reviewCount: 47,
   }),
@@ -506,7 +480,6 @@ export const seedProducts: Product[] = [
     price: 52.0,
     sellerId: "seller-2",
     categoryId: "cat-home",
-    images: [`${IMAGE_BASE}/photo-1558618666-fcd25c85cd64?w=600&h=600&fit=crop`],
     rating: 4.5,
     reviewCount: 68,
   }),
@@ -570,6 +543,7 @@ export function searchProducts(
   query: string,
   filters: {
     category?: string;
+    seller?: string;
     minPrice?: number;
     maxPrice?: number;
     minRating?: number;
@@ -610,6 +584,10 @@ export function searchProducts(
 
   if (filters.inStock) {
     results = results.filter((p) => p.stock > 0);
+  }
+
+  if (filters.seller) {
+    results = results.filter((p) => p.seller.slug === filters.seller);
   }
 
   switch (filters.sort) {
@@ -653,29 +631,43 @@ export function searchProducts(
   return { data, total, page, limit, totalPages };
 }
 
+function excludeIds(products: Product[], ids: Set<string>): Product[] {
+  return products.filter((p) => !ids.has(p.id));
+}
+
 export function getFeaturedProducts(): Product[] {
   return seedProducts.filter((p) => p.rating >= 4.7).slice(0, 8);
 }
 
-export function getTrendingProducts(): Product[] {
-  return [...seedProducts]
-    .sort((a, b) => b.reviewCount - a.reviewCount)
+export function getTrendingProducts(exclude: string[] = []): Product[] {
+  const excluded = new Set(exclude);
+  return excludeIds([...seedProducts].sort((a, b) => b.reviewCount - a.reviewCount), excluded)
     .slice(0, 8);
 }
 
-export function getNewArrivals(): Product[] {
-  return [...seedProducts]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    )
-    .slice(0, 8);
+export function getNewArrivals(exclude: string[] = []): Product[] {
+  const excluded = new Set(exclude);
+  return excludeIds(
+    [...seedProducts].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+    excluded,
+  ).slice(0, 8);
 }
 
-export function getDeals(): Product[] {
-  return seedProducts
-    .filter((p) => p.compareAtPrice && p.compareAtPrice > p.price)
-    .slice(0, 8);
+export function getDeals(exclude: string[] = []): Product[] {
+  const excluded = new Set(exclude);
+  return excludeIds(
+    seedProducts.filter((p) => p.compareAtPrice && p.compareAtPrice > p.price),
+    excluded,
+  ).slice(0, 8);
+}
+
+export function getProductReviewStats(productId: string): { count: number; average: number } {
+  const reviews = seedReviews.filter((r) => r.productId === productId);
+  if (reviews.length === 0) return { count: 0, average: 0 };
+  const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+  return { count: reviews.length, average };
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {

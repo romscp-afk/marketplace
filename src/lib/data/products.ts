@@ -191,22 +191,22 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   return data;
 }
 
-export async function getTrendingProducts(): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getTrendingProducts();
-  const { data } = await getProducts({ sort: "popularity", limit: 8 });
-  return data;
+export async function getTrendingProducts(exclude: string[] = []): Promise<Product[]> {
+  if (!isSupabaseConfigured()) return seed.getTrendingProducts(exclude);
+  const { data } = await getProducts({ sort: "popularity", limit: 8 + exclude.length });
+  return data.filter((p) => !exclude.includes(p.id)).slice(0, 8);
 }
 
-export async function getNewArrivals(): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getNewArrivals();
-  const { data } = await getProducts({ sort: "newest", limit: 8 });
-  return data;
+export async function getNewArrivals(exclude: string[] = []): Promise<Product[]> {
+  if (!isSupabaseConfigured()) return seed.getNewArrivals(exclude);
+  const { data } = await getProducts({ sort: "newest", limit: 8 + exclude.length });
+  return data.filter((p) => !exclude.includes(p.id)).slice(0, 8);
 }
 
-export async function getDeals(): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getDeals();
-  const { data } = await getProducts({ sort: "deals", limit: 8 });
-  return data.filter((p) => p.compareAtPrice && p.compareAtPrice > p.price);
+export async function getDeals(exclude: string[] = []): Promise<Product[]> {
+  if (!isSupabaseConfigured()) return seed.getDeals(exclude);
+  const { data } = await getProducts({ sort: "deals", limit: 16 });
+  return data.filter((p) => !exclude.includes(p.id) && p.compareAtPrice && p.compareAtPrice > p.price).slice(0, 8);
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {

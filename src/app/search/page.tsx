@@ -8,7 +8,9 @@ import { ProductCard } from "@/components/product/product-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { searchProducts, getDeals } from "@/data/seed";
+import { searchProducts, getDeals, seedSellers } from "@/data/seed";
+import { navigation } from "@/config/navigation";
+import { brand } from "@/config/brand";
 import { useWishlist } from "@/contexts/wishlist-context";
 import { useRecentSearches } from "@/contexts/cart-context";
 import { analytics } from "@/lib/analytics";
@@ -30,6 +32,7 @@ function SearchContent() {
   const minRating = searchParams.get("minRating")
     ? Number(searchParams.get("minRating"))
     : undefined;
+  const seller = searchParams.get("seller") ?? undefined;
   const inStock = searchParams.get("inStock") === "true";
   const page = Number(searchParams.get("page") ?? "1");
 
@@ -40,6 +43,7 @@ function SearchContent() {
     }
     return searchProducts(query, {
       category,
+      seller,
       minPrice,
       maxPrice,
       minRating,
@@ -48,7 +52,7 @@ function SearchContent() {
       page,
       limit: 12,
     });
-  }, [query, category, sort, minPrice, maxPrice, minRating, inStock, page]);
+  }, [query, category, seller, sort, minPrice, maxPrice, minRating, inStock, page]);
 
   useEffect(() => {
     if (query) {
@@ -60,8 +64,12 @@ function SearchContent() {
 
   const activeFilters = [
     category && { key: "category", label: `Category: ${category}` },
-    minPrice && { key: "minPrice", label: `Min: $${minPrice}` },
-    maxPrice && { key: "maxPrice", label: `Max: $${maxPrice}` },
+    seller && {
+      key: "seller",
+      label: `Seller: ${seedSellers.find((s) => s.slug === seller)?.storeName ?? seller}`,
+    },
+    minPrice && { key: "minPrice", label: `Min: S$${minPrice}` },
+    maxPrice && { key: "maxPrice", label: `Max: S$${maxPrice}` },
     minRating && { key: "minRating", label: `${minRating}+ stars` },
     inStock && { key: "inStock", label: "In stock" },
   ].filter(Boolean) as { key: string; label: string }[];
@@ -182,9 +190,80 @@ function SearchContent() {
 function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
   const params = new URLSearchParams(searchParams.toString());
 
+  const applyParams = () => {
+    window.location.href = `/search?${params.toString()}`;
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="text-sm font-semibold">Filters</h2>
+      <p className="text-muted text-xs">Prices in {brand.locale.currency}</p>
+
+      <div>
+        <label htmlFor="filter-category" className="mb-2 block text-sm font-medium">
+          Category
+        </label>
+        <select
+          id="filter-category"
+          defaultValue={params.get("category") ?? ""}
+          className="border-border h-10 w-full rounded-lg border bg-surface px-3 text-sm"
+          onChange={(e) => {
+            if (e.target.value) params.set("category", e.target.value);
+            else params.delete("category");
+            applyParams();
+          }}
+        >
+          <option value="">All categories</option>
+          {navigation.categories.map((cat) => (
+            <option key={cat.id} value={cat.slug}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="filter-seller" className="mb-2 block text-sm font-medium">
+          Seller
+        </label>
+        <select
+          id="filter-seller"
+          defaultValue={params.get("seller") ?? ""}
+          className="border-border h-10 w-full rounded-lg border bg-surface px-3 text-sm"
+          onChange={(e) => {
+            if (e.target.value) params.set("seller", e.target.value);
+            else params.delete("seller");
+            applyParams();
+          }}
+        >
+          <option value="">All sellers</option>
+          {seedSellers.map((s) => (
+            <option key={s.id} value={s.slug}>
+              {s.storeName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor="filter-min-rating" className="mb-2 block text-sm font-medium">
+          Minimum rating
+        </label>
+        <select
+          id="filter-min-rating"
+          defaultValue={params.get("minRating") ?? ""}
+          className="border-border h-10 w-full rounded-lg border bg-surface px-3 text-sm"
+          onChange={(e) => {
+            if (e.target.value) params.set("minRating", e.target.value);
+            else params.delete("minRating");
+            applyParams();
+          }}
+        >
+          <option value="">Any rating</option>
+          <option value="4">4+ stars</option>
+          <option value="4.5">4.5+ stars</option>
+        </select>
+      </div>
 
       <div>
         <label htmlFor="filter-min-price" className="mb-2 block text-sm font-medium">
@@ -198,7 +277,7 @@ function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
           onBlur={(e) => {
             if (e.target.value) params.set("minPrice", e.target.value);
             else params.delete("minPrice");
-            window.location.href = `/search?${params.toString()}`;
+            applyParams();
           }}
         />
       </div>
@@ -215,7 +294,7 @@ function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
           onBlur={(e) => {
             if (e.target.value) params.set("maxPrice", e.target.value);
             else params.delete("maxPrice");
-            window.location.href = `/search?${params.toString()}`;
+            applyParams();
           }}
         />
       </div>
@@ -228,7 +307,7 @@ function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
           onChange={(e) => {
             if (e.target.checked) params.set("inStock", "true");
             else params.delete("inStock");
-            window.location.href = `/search?${params.toString()}`;
+            applyParams();
           }}
           className="h-4 w-4 rounded"
         />

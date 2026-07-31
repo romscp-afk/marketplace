@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Heart } from "lucide-react";
 import type { Product } from "@/types";
 import { cn, formatCurrency } from "@/lib/utils";
+import { SafeImage } from "@/components/ui/safe-image";
 import { Rating } from "@/components/ui/rating";
 import { Badge } from "@/components/ui/badge";
 
@@ -36,8 +36,12 @@ export function ProductCard({
       aria-label={product.title}
     >
       <div className="relative aspect-square overflow-hidden rounded-xl bg-surface">
-        <Link href={`/products/${product.slug}`} className="block h-full">
-          <Image
+        <Link
+          href={`/products/${product.slug}`}
+          className="block h-full"
+          aria-label={`View ${product.title}`}
+        >
+          <SafeImage
             src={product.images[0] ?? "/images/placeholder-product.svg"}
             alt={product.title}
             fill
@@ -74,10 +78,7 @@ export function ProductCard({
             }
             aria-pressed={isInWishlist}
           >
-            <Heart
-              className={cn("h-4 w-4", isInWishlist && "fill-current")}
-              aria-hidden="true"
-            />
+            <span aria-hidden="true">{isInWishlist ? "♥" : "♡"}</span>
           </button>
         ) : null}
       </div>
