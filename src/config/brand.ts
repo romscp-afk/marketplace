@@ -27,6 +27,11 @@ export const brand = {
     businessAddress: "1 Raffles Place, Singapore 048616",
   },
 
+  copyright: {
+    holder: "UXguard",
+    url: "https://uxguard.studio",
+  },
+
   social: {
     twitter: "https://twitter.com/example",
     instagram: "https://instagram.com/example",

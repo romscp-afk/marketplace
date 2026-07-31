@@ -36,7 +36,16 @@ export function Footer() {
 
         <div className="border-primary-foreground/20 mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row">
           <p className="text-primary-foreground/60 text-xs">
-            &copy; {currentYear} {brand.name}. All rights reserved.
+            &copy; {currentYear}{" "}
+            <a
+              href={brand.copyright.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-foreground/80 hover:text-primary-foreground underline underline-offset-2 transition-colors"
+            >
+              {brand.copyright.holder}
+            </a>
+            . All rights reserved.
           </p>
           <p className="text-primary-foreground/60 text-xs">
             {brand.contact.businessAddress}
