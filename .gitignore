@@ -45,3 +45,8 @@ next-env.d.ts
 .idea
 .vscode
 .env*
+
+# mobile
+mobile/node_modules
+mobile/.expo
+mobile/dist
