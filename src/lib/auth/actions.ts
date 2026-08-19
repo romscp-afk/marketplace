@@ -34,8 +34,6 @@ export async function signIn(
   _prev: AuthActionResult | null,
   formData: FormData,
 ): Promise<AuthActionResult> {
-  if (!isSupabaseConfigured()) return supabaseNotConfigured();
-
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -43,6 +41,21 @@ export async function signIn(
 
   if (!parsed.success) {
     return { success: false, error: parsed.error.errors[0]?.message ?? "Invalid input" };
+  }
+
+  if (!isSupabaseConfigured()) {
+    const {
+      isBootstrapAdminCredentials,
+      setBootstrapSession,
+    } = await import("@/lib/auth/bootstrap");
+
+    if (!isBootstrapAdminCredentials(parsed.data.email, parsed.data.password)) {
+      return { success: false, error: "Invalid email or password" };
+    }
+
+    await setBootstrapSession(parsed.data.email);
+    revalidatePath("/", "layout");
+    redirect("/admin/dashboard");
   }
 
   const supabase = await createClient();
@@ -96,8 +109,10 @@ export async function signUp(
 
 export async function signOut(): Promise<void> {
   if (!isSupabaseConfigured()) {
+    const { clearBootstrapSession } = await import("@/lib/auth/bootstrap");
+    await clearBootstrapSession();
+    revalidatePath("/", "layout");
     redirect("/");
-    return;
   }
 
   const supabase = await createClient();

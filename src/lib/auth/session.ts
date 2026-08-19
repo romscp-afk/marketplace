@@ -21,7 +21,10 @@ export const getSession = cache(async () => {
 });
 
 export const getUser = cache(async (): Promise<AuthUser | null> => {
-  if (!isSupabaseConfigured()) return null;
+  if (!isSupabaseConfigured()) {
+    const { getBootstrapUserFromCookie } = await import("@/lib/auth/bootstrap");
+    return getBootstrapUserFromCookie();
+  }
 
   const supabase = await createClient();
   const { data: { user }, error } = await supabase.auth.getUser();

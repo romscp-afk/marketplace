@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
-import { getUser } from "@/lib/auth/session";
-import { isSupabaseConfigured } from "@/lib/env";
+import { getUser, isAdmin, isSeller } from "@/lib/auth/session";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { MobileAccountView } from "@/components/marketplace/mobile-account-view";
 import {
@@ -33,7 +32,7 @@ interface AccountPageProps {
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {
   const { registered } = await searchParams;
-  const user = isSupabaseConfigured() ? await getUser() : null;
+  const user = await getUser();
 
   return (
     <>
@@ -82,6 +81,26 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                 <p className="text-muted mt-1 text-xs capitalize">
                   Role: {user.roles.join(", ").replace(/_/g, " ")}
                 </p>
+                {(isAdmin(user) || isSeller(user)) ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {isAdmin(user) ? (
+                      <Link
+                        href="/admin/dashboard"
+                        className="bg-primary text-primary-foreground hover:bg-primary-dark inline-flex h-10 items-center rounded-lg px-4 text-sm font-medium"
+                      >
+                        Admin portal
+                      </Link>
+                    ) : null}
+                    {isSeller(user) ? (
+                      <Link
+                        href="/seller/dashboard"
+                        className="border-border hover:bg-background inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium"
+                      >
+                        Seller portal
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : null}
               </>
             ) : (
               <>

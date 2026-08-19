@@ -111,7 +111,12 @@ Restart dev server. Health check will show `"supabase": "configured"`.
 
 ### Create admin user (development)
 
-After registering a normal account, promote to admin via Supabase SQL editor:
+While Supabase is not connected, sign in at `/account/login` with the bootstrap super-admin:
+
+- Email: `admin@aromza.store`
+- Password: `AromzaPortal#2026` (override with `BOOTSTRAP_ADMIN_PASSWORD` on Vercel)
+
+Override email with `BOOTSTRAP_ADMIN_EMAIL`. After registering a normal account in Supabase, promote to admin via SQL editor:
 
 ```sql
 INSERT INTO public.user_roles (user_id, role)
