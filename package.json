@@ -17,6 +17,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ci": "playwright test --project=chromium",
+    "og:share": "node scripts/generate-og-share.mjs",
     "mobile": "npm --prefix mobile start",
     "mobile:ios": "npm --prefix mobile run ios",
     "mobile:android": "npm --prefix mobile run android",

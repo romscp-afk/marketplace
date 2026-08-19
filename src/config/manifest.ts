@@ -1,9 +1,9 @@
 import { brand } from "@/config/brand";
 
 export const manifest = {
-  name: brand.name,
+  name: brand.share.title,
   short_name: brand.shortName,
-  description: brand.description,
+  description: brand.share.description,
   start_url: "/",
   display: "standalone",
   background_color: brand.pwa.backgroundColor,

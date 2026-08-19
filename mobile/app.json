@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Aromza",
+    "description": "Aromza — Discover More, From A to Z. Shop curated finds from trusted sellers.",
     "slug": "aromza-mobile",
     "version": "1.0.0",
     "orientation": "portrait",

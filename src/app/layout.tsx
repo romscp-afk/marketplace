@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
-import { brand } from "@/config/brand";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Footer } from "@/components/layout/footer";
@@ -10,6 +9,8 @@ import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-regis
 import { CartProvider } from "@/contexts/cart-context";
 import { CartFeedbackProvider } from "@/components/commerce/cart-feedback";
 import { WishlistProvider } from "@/contexts/wishlist-context";
+import { brand } from "@/config/brand";
+import { createSiteMetadata } from "@/lib/metadata";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -24,31 +25,13 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: brand.name,
-    template: `%s | ${brand.name}`,
-  },
-  description: brand.description,
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-  ),
-  openGraph: {
-    type: "website",
-    locale: brand.locale.default,
-    siteName: brand.name,
-    title: brand.name,
-    description: brand.description,
-  },
+export const metadata: Metadata = createSiteMetadata({
   robots: {
     index: true,
     follow: true,
   },
   manifest: "/manifest.json",
-  other: {
-    "mobile-web-app-capable": "yes",
-  },
-};
+});
 
 export default function RootLayout({
   children,
