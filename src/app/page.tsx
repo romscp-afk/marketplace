@@ -12,6 +12,11 @@ import { CategoryCarousel } from "@/components/marketplace/category-carousel";
 import { BannerCarousel } from "@/components/marketplace/banner-carousel";
 import { FlashSaleSection } from "@/components/marketplace/flash-sale-section";
 import { MarketplaceHomeHeader } from "@/components/marketplace/home-header";
+import { TaobaoHeroSection } from "@/components/marketplace/taobao/hero-section";
+import {
+  TaobaoPromoGrid,
+  TaobaoSearchHeader,
+} from "@/components/marketplace/taobao/search-header";
 
 function mergeFeedProducts(lists: Product[][]): Product[] {
   const seen = new Set<string>();
@@ -40,10 +45,10 @@ export default async function HomePage() {
   const feedProducts = mergeFeedProducts([deals, trending, newArrivals, featured]);
 
   return (
-    <div className="bg-background min-h-full md:pt-0">
-      <MarketplaceHomeHeader />
-
+    <div className="bg-background min-h-full">
+      {/* Mobile — marketplace app layout */}
       <div className="md:hidden">
+        <MarketplaceHomeHeader />
         <QuickActions />
         <CategoryCarousel categories={categories} />
         <BannerCarousel />
@@ -60,21 +65,25 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Desktop — same sections, wider grid */}
-      <div className="mx-auto hidden max-w-7xl md:block">
-        <QuickActions />
-        <CategoryCarousel categories={categories} />
-        <BannerCarousel />
-        <FlashSaleSection products={deals} />
-        <div className="bg-surface mt-2 border-b border-border px-4 py-3">
-          <h2 className="text-header text-base font-bold tracking-wide uppercase">
-            Daily Discover
-          </h2>
+      {/* Desktop — Taobao-style layout */}
+      <div className="hidden md:block">
+        <TaobaoSearchHeader />
+        <div className="mx-auto max-w-7xl px-4">
+          <TaobaoHeroSection categories={categories} />
         </div>
-        <div className="grid grid-cols-2 gap-0 px-2 py-4 lg:grid-cols-4">
-          {feedProducts.map((product, i) => (
-            <ProductCard key={product.id} product={product} priority={i < 8} />
-          ))}
+        <TaobaoPromoGrid />
+        <div className="mx-auto max-w-7xl px-4">
+          <FlashSaleSection products={deals} />
+          <div className="bg-surface mt-4 border-b border-border px-4 py-3">
+            <h2 className="text-header text-base font-bold tracking-wide">
+              Guess You Like
+            </h2>
+          </div>
+          <div className="grid grid-cols-3 gap-3 py-4 lg:grid-cols-4 xl:grid-cols-5">
+            {feedProducts.map((product, i) => (
+              <ProductCard key={product.id} product={product} priority={i < 10} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
