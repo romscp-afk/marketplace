@@ -1,5 +1,5 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import type { Product } from "@/lib/types";
 import { formatCurrency } from "@/lib/format";
 import { discountPercent, formatSoldCount } from "@/lib/shopee-theme";
@@ -23,68 +23,73 @@ export function ProductCard({
   isWishlisted,
   variant = "grid",
 }: ProductCardProps) {
+  const router = useRouter();
   const discount = discountPercent(product.price, product.compareAtPrice);
   const isFlash = variant === "flash";
 
   return (
-    <Link href={`/product/${product.slug}`} asChild>
-      <Pressable style={[styles.card, isFlash && styles.flashCard]}>
-        <View style={styles.imageWrap}>
-          <Image source={{ uri: productImage(product) }} style={styles.image} resizeMode="cover" />
-          {discount ? (
-            <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>-{discount}%</Text>
-            </View>
-          ) : null}
-          {product.seller.isVerified ? (
-            <View style={styles.mallBadge}>
-              <Text style={styles.mallText}>Mall</Text>
-            </View>
-          ) : null}
-          {onToggleWishlist ? (
-            <Pressable
-              style={styles.wishlistBtn}
-              onPress={() => onToggleWishlist()}
-              hitSlop={8}
-            >
-              <Text style={styles.wishlistIcon}>{isWishlisted ? "♥" : "♡"}</Text>
-            </Pressable>
-          ) : null}
+    <Pressable
+      style={isFlash ? styles.flashCard : styles.card}
+      onPress={() => router.push(`/product/${product.slug}`)}
+    >
+      <View style={styles.imageWrap}>
+        <Image source={{ uri: productImage(product) }} style={styles.image} resizeMode="cover" />
+        {discount ? (
+          <View style={styles.discountBadge}>
+            <Text style={styles.discountText}>-{discount}%</Text>
+          </View>
+        ) : null}
+        {product.seller.isVerified ? (
+          <View style={styles.mallBadge}>
+            <Text style={styles.mallText}>Mall</Text>
+          </View>
+        ) : null}
+        {onToggleWishlist ? (
+          <Pressable
+            style={styles.wishlistBtn}
+            onPress={(e) => {
+              e.stopPropagation();
+              onToggleWishlist();
+            }}
+            hitSlop={8}
+          >
+            <Text style={styles.wishlistIcon}>{isWishlisted ? "♥" : "♡"}</Text>
+          </Pressable>
+        ) : null}
+      </View>
+
+      <View style={styles.body}>
+        {!isFlash ? (
+          <Text style={styles.title} numberOfLines={2}>
+            {product.title}
+          </Text>
+        ) : null}
+
+        <View style={styles.priceRow}>
+          <Text style={styles.currency}>{product.currency === "SGD" ? "S$" : "$"}</Text>
+          <Text style={styles.price}>
+            {product.price.toFixed(product.price % 1 === 0 ? 0 : 2)}
+          </Text>
         </View>
 
-        <View style={styles.body}>
-          {!isFlash ? (
-            <Text style={styles.title} numberOfLines={2}>
-              {product.title}
-            </Text>
-          ) : null}
+        {!isFlash && product.compareAtPrice && product.compareAtPrice > product.price ? (
+          <Text style={styles.comparePrice}>
+            {formatCurrency(product.compareAtPrice, product.currency)}
+          </Text>
+        ) : null}
 
-          <View style={styles.priceRow}>
-            <Text style={styles.currency}>{product.currency === "SGD" ? "S$" : "$"}</Text>
-            <Text style={styles.price}>
-              {product.price.toFixed(product.price % 1 === 0 ? 0 : 2)}
-            </Text>
-          </View>
-
-          {!isFlash && product.compareAtPrice && product.compareAtPrice > product.price ? (
-            <Text style={styles.comparePrice}>
-              {formatCurrency(product.compareAtPrice, product.currency)}
-            </Text>
-          ) : null}
-
-          <View style={styles.metaRow}>
-            <Text style={styles.rating}>★ {product.rating.toFixed(1)}</Text>
-            <Text style={styles.sold}>{formatSoldCount(product.reviewCount)}</Text>
-          </View>
-
-          {(product.price >= 25 || !product.deliveryFee) ? (
-            <View style={styles.shipBadge}>
-              <Text style={styles.shipText}>Free Shipping</Text>
-            </View>
-          ) : null}
+        <View style={styles.metaRow}>
+          <Text style={styles.rating}>★ {product.rating.toFixed(1)}</Text>
+          <Text style={styles.sold}>{formatSoldCount(product.reviewCount)}</Text>
         </View>
-      </Pressable>
-    </Link>
+
+        {product.price >= 25 || !product.deliveryFee ? (
+          <View style={styles.shipBadge}>
+            <Text style={styles.shipText}>Free Shipping</Text>
+          </View>
+        ) : null}
+      </View>
+    </Pressable>
   );
 }
 
@@ -96,6 +101,10 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   flashCard: {
+    flex: 1,
+    backgroundColor: Colors.light.surface,
+    overflow: "hidden",
+    margin: 4,
     borderWidth: 1,
     borderColor: Colors.light.border,
     borderRadius: 4,

@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import Colors from "@/constants/Colors";
 
@@ -47,16 +47,16 @@ export function SearchBar({
 }
 
 export function HomeSearchBar() {
+  const router = useRouter();
+
   return (
-    <Link href="/search" asChild>
-      <Pressable style={styles.pressable}>
-        <View style={styles.wrap} pointerEvents="none">
-          <Ionicons name="search" size={18} color={Colors.light.textMuted} />
-          <Text style={styles.placeholder}>Search products, brands and more</Text>
-          <Ionicons name="camera-outline" size={20} color={Colors.light.textMuted} />
-        </View>
-      </Pressable>
-    </Link>
+    <Pressable style={styles.pressable} onPress={() => router.push("/search")}>
+      <View style={styles.wrap} pointerEvents="none">
+        <Ionicons name="search" size={18} color={Colors.light.textMuted} />
+        <Text style={styles.placeholder}>Search products, brands and more</Text>
+        <Ionicons name="camera-outline" size={20} color={Colors.light.textMuted} />
+      </View>
+    </Pressable>
   );
 }
 

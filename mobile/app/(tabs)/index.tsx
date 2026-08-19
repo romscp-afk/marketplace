@@ -110,7 +110,7 @@ export default function HomeScreen() {
           />
         }
         ListHeaderComponent={
-          <>
+          <View>
             <QuickActions />
             <CategoryCarousel categories={data.categories} />
             <BannerCarousel />
@@ -118,7 +118,7 @@ export default function HomeScreen() {
             <View style={styles.discoverHeader}>
               <Text style={styles.discoverTitle}>Daily Discover</Text>
             </View>
-          </>
+          </View>
         }
         contentContainerStyle={styles.grid}
         columnWrapperStyle={styles.row}

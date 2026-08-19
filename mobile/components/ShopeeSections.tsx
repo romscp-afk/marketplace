@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 import { ProductCard } from "@/components/ProductCard";
@@ -17,6 +17,7 @@ interface FlashSaleSectionProps {
 }
 
 export function FlashSaleSection({ products }: FlashSaleSectionProps) {
+  const router = useRouter();
   const [endsAt] = useState(() => flashSaleEndsAt());
   const [countdown, setCountdown] = useState(() =>
     formatCountdown(endsAt.getTime() - Date.now()),
@@ -44,49 +45,46 @@ export function FlashSaleSection({ products }: FlashSaleSectionProps) {
             <Text style={styles.timer}>{countdown}</Text>
           </View>
         </View>
-        <Link href="/search?sort=deals" asChild>
-          <Pressable>
-            <Text style={styles.seeAll}>See all ›</Text>
-          </Pressable>
-        </Link>
+        <Pressable onPress={() => router.push("/search?sort=deals")}>
+          <Text style={styles.seeAll}>See all ›</Text>
+        </Pressable>
       </View>
 
-      <FlatList
+      <ScrollView
         horizontal
-        data={products.slice(0, 10)}
-        keyExtractor={(item) => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <View style={styles.cardWrap}>
+      >
+        {products.slice(0, 10).map((item) => (
+          <View key={item.id} style={styles.cardWrap}>
             <ProductCard product={item} variant="flash" />
           </View>
-        )}
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
 export function BannerCarousel() {
   return (
-    <FlatList
+    <ScrollView
       horizontal
-      data={shopee.banners}
-      keyExtractor={(item) => item.id}
       showsHorizontalScrollIndicator={false}
       pagingEnabled
       contentContainerStyle={styles.bannerList}
-      renderItem={({ item }) => (
-        <View style={[styles.banner, { backgroundColor: item.color }]}>
+    >
+      {shopee.banners.map((item) => (
+        <View key={item.id} style={[styles.banner, { backgroundColor: item.color }]}>
           <Text style={styles.bannerTitle}>{item.title}</Text>
           <Text style={styles.bannerSub}>{item.subtitle}</Text>
         </View>
-      )}
-    />
+      ))}
+    </ScrollView>
   );
 }
 
 export function QuickActions() {
+  const router = useRouter();
   const iconMap = {
     flash: "flash-outline",
     ticket: "ticket-outline",
@@ -98,22 +96,23 @@ export function QuickActions() {
   return (
     <View style={styles.actions}>
       {shopee.quickActions.map((action) => (
-        <Link
+        <Pressable
           key={action.id}
-          href={action.id === "mall" ? "/search?seller=verified" : "/search?sort=deals"}
-          asChild
+          style={styles.actionItem}
+          onPress={() =>
+            router.push(action.id === "mall" ? "/search?seller=verified" : "/search?sort=deals")
+          }
         >
-          <Pressable style={styles.actionItem}>
-            <View style={[styles.actionIcon, { backgroundColor: `${action.color}18` }]}>
-              <Ionicons
-                name={iconMap[action.icon]}
-                size={22}
-                color={action.color}
-              />
-            </View>
-            <Text style={styles.actionLabel}>{action.label}</Text>
-          </Pressable>
-        </Link>
+          <View
+            style={[
+              styles.actionIcon,
+              { backgroundColor: `${action.color}18` },
+            ]}
+          >
+            <Ionicons name={iconMap[action.icon]} size={22} color={action.color} />
+          </View>
+          <Text style={styles.actionLabel}>{action.label}</Text>
+        </Pressable>
       ))}
     </View>
   );
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   seeAll: { marginLeft: "auto", color: "#fff", fontSize: 12 },
   list: { padding: 10, gap: 8 },
   cardWrap: { width: 130 },
-  bannerList: { paddingHorizontal: 8, paddingVertical: 8, gap: 8 },
+  bannerList: { paddingHorizontal: 8, paddingVertical: 8 },
   banner: {
     width: 280,
     height: 100,

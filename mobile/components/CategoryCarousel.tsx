@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import type { Category } from "@/lib/types";
 import Colors from "@/constants/Colors";
 
@@ -9,31 +9,33 @@ function categoryImage(slug: string, imageUrl?: string) {
 }
 
 export function CategoryCarousel({ categories }: { categories: Category[] }) {
+  const router = useRouter();
+
   return (
     <View style={styles.wrap}>
       {categories.map((cat) => (
-        <Link key={cat.id} href={`/category/${cat.slug}`} asChild>
-          <Pressable style={styles.item}>
-            <View style={styles.iconWrap}>
-              <Image
-                source={{ uri: categoryImage(cat.slug, cat.imageUrl) }}
-                style={styles.icon}
-              />
-            </View>
-            <Text style={styles.label} numberOfLines={2}>
-              {cat.name}
-            </Text>
-          </Pressable>
-        </Link>
-      ))}
-      <Link href="/search" asChild>
-        <Pressable style={styles.item}>
-          <View style={[styles.iconWrap, styles.moreWrap]}>
-            <Ionicons name="grid-outline" size={22} color={Colors.light.tint} />
+        <Pressable
+          key={cat.id}
+          style={styles.item}
+          onPress={() => router.push(`/category/${cat.slug}`)}
+        >
+          <View style={styles.iconWrap}>
+            <Image
+              source={{ uri: categoryImage(cat.slug, cat.imageUrl) }}
+              style={styles.icon}
+            />
           </View>
-          <Text style={styles.label}>More</Text>
+          <Text style={styles.label} numberOfLines={2}>
+            {cat.name}
+          </Text>
         </Pressable>
-      </Link>
+      ))}
+      <Pressable style={styles.item} onPress={() => router.push("/search")}>
+        <View style={styles.moreIconWrap}>
+          <Ionicons name="grid-outline" size={22} color={Colors.light.tint} />
+        </View>
+        <Text style={styles.label}>More</Text>
+      </Pressable>
     </View>
   );
 }
@@ -60,10 +62,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.light.border,
   },
-  moreWrap: {
+  moreIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.light.primaryLight,
+    borderWidth: 1,
     borderColor: Colors.light.primaryLight,
   },
   icon: { width: "100%", height: "100%" },
