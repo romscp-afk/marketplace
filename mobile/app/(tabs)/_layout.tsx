@@ -15,9 +15,11 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors.light.surface,
           borderTopColor: Colors.light.border,
+          height: 56,
+          paddingBottom: 4,
         },
-        headerStyle: { backgroundColor: Colors.light.surface },
-        headerTintColor: Colors.light.text,
+        tabBarLabelStyle: { fontSize: 10, marginTop: -2 },
+        headerShown: false,
       }}
     >
       <Tabs.Screen
@@ -25,16 +27,16 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="home" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "Mall",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search-outline" size={size} color={color} />
+            <Ionicons name="bag-handle-outline" size={size} color={color} />
           ),
         }}
       />
@@ -43,24 +45,33 @@ export default function TabLayout() {
         options={{
           title: "Cart",
           tabBarBadge: itemCount > 0 ? itemCount : undefined,
+          tabBarBadgeStyle: { backgroundColor: Colors.light.tint, fontSize: 10 },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),
+          headerShown: true,
+          headerStyle: { backgroundColor: Colors.light.tint },
+          headerTintColor: "#fff",
+          headerTitle: "Shopping Cart",
         }}
       />
       <Tabs.Screen
         name="wishlist"
         options={{
-          title: "Wishlist",
+          title: "Noti",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart-outline" size={size} color={color} />
+            <Ionicons name="notifications-outline" size={size} color={color} />
           ),
+          headerShown: true,
+          headerStyle: { backgroundColor: Colors.light.tint },
+          headerTintColor: "#fff",
+          headerTitle: "My Likes",
         }}
       />
       <Tabs.Screen
         name="account"
         options={{
-          title: "Account",
+          title: "Me",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

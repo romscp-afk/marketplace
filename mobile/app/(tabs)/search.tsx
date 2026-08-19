@@ -4,28 +4,31 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
+import { SearchBar } from "@/components/SearchBar";
 import { ProductCard } from "@/components/ProductCard";
 import { LoadingView } from "@/components/LoadingView";
 import { fetchProducts } from "@/lib/api";
+import { shopee } from "@/lib/shopee-theme";
 import type { Product } from "@/lib/types";
 import { useWishlist } from "@/contexts/wishlist-context";
 import Colors from "@/constants/Colors";
 
 const SORT_OPTIONS = [
   { label: "Relevance", value: "" },
-  { label: "Newest", value: "newest" },
-  { label: "Popular", value: "popularity" },
-  { label: "Rating", value: "rating" },
+  { label: "Top Sales", value: "popularity" },
+  { label: "Latest", value: "newest" },
   { label: "Price ↑", value: "price_asc" },
   { label: "Price ↓", value: "price_desc" },
-  { label: "Deals", value: "deals" },
+  { label: "Rating", value: "rating" },
 ];
 
 export default function SearchScreen() {
+  const insets = useSafeAreaInsets();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,11 +39,7 @@ export default function SearchScreen() {
   const search = useCallback(async (q: string, s: string) => {
     setLoading(true);
     try {
-      const result = await fetchProducts({
-        q,
-        sort: s || undefined,
-        limit: 24,
-      });
+      const result = await fetchProducts({ q, sort: s || undefined, limit: 32 });
       setProducts(result.data);
       setTotal(result.total);
     } catch {
@@ -56,40 +55,53 @@ export default function SearchScreen() {
     return () => clearTimeout(timer);
   }, [query, sort, search]);
 
+  const showTrending = !query.trim();
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search products..."
-        placeholderTextColor={Colors.light.textSecondary}
-        value={query}
-        onChangeText={setQuery}
-        autoCorrect={false}
-        returnKeyType="search"
-      />
+      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
+        <SearchBar value={query} onChangeText={setQuery} />
+      </View>
 
-      <FlatList
-        horizontal
-        data={SORT_OPTIONS}
-        keyExtractor={(item) => item.value || "default"}
-        showsHorizontalScrollIndicator={false}
-        style={styles.sortBar}
-        contentContainerStyle={styles.sortContent}
-        renderItem={({ item }) => (
-          <Pressable
-            style={[styles.sortChip, sort === item.value && styles.sortChipActive]}
-            onPress={() => setSort(item.value)}
-          >
-            <Text
-              style={[styles.sortText, sort === item.value && styles.sortTextActive]}
+      {showTrending ? (
+        <View style={styles.trending}>
+          <Text style={styles.trendingTitle}>Trending Searches</Text>
+          <View style={styles.trendingChips}>
+            {shopee.trendingSearches.map((term) => (
+              <Pressable key={term} style={styles.trendChip} onPress={() => setQuery(term)}>
+                <Ionicons name="trending-up" size={12} color={Colors.light.tint} />
+                <Text style={styles.trendText}>{term}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      ) : null}
+
+      <View style={styles.filterBar}>
+        <FlatList
+          horizontal
+          data={SORT_OPTIONS}
+          keyExtractor={(item) => item.value || "default"}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.sortContent}
+          renderItem={({ item }) => (
+            <Pressable
+              style={[styles.sortChip, sort === item.value && styles.sortChipActive]}
+              onPress={() => setSort(item.value)}
             >
-              {item.label}
-            </Text>
-          </Pressable>
-        )}
-      />
+              <Text style={[styles.sortText, sort === item.value && styles.sortTextActive]}>
+                {item.label}
+              </Text>
+            </Pressable>
+          )}
+        />
+        <Pressable style={styles.filterBtn}>
+          <Ionicons name="options-outline" size={16} color={Colors.light.text} />
+          <Text style={styles.filterText}>Filter</Text>
+        </Pressable>
+      </View>
 
-      <Text style={styles.resultCount}>{total} products</Text>
+      <Text style={styles.resultCount}>{total} results</Text>
 
       {loading ? (
         <LoadingView />
@@ -99,6 +111,7 @@ export default function SearchScreen() {
           keyExtractor={(item) => item.id}
           numColumns={2}
           contentContainerStyle={styles.grid}
+          columnWrapperStyle={styles.row}
           ListEmptyComponent={
             <Text style={styles.empty}>No products found. Try another search.</Text>
           }
@@ -117,37 +130,67 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.light.background },
-  input: {
-    margin: 12,
-    padding: 14,
-    backgroundColor: Colors.light.surface,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    fontSize: 16,
-    color: Colors.light.text,
+  header: {
+    backgroundColor: Colors.light.tint,
+    paddingHorizontal: 12,
+    paddingBottom: 10,
   },
-  sortBar: { maxHeight: 44 },
-  sortContent: { paddingHorizontal: 12, gap: 8 },
+  trending: {
+    backgroundColor: Colors.light.surface,
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  trendingTitle: { fontSize: 13, fontWeight: "700", color: Colors.light.text, marginBottom: 8 },
+  trendingChips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  trendChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: Colors.light.primaryLight,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 4,
+  },
+  trendText: { fontSize: 12, color: Colors.light.text },
+  filterBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.light.surface,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  sortContent: { paddingHorizontal: 8, paddingVertical: 8 },
   sortChip: {
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-    backgroundColor: Colors.light.surface,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
-    marginRight: 8,
+    paddingVertical: 6,
+    marginRight: 6,
+    borderRadius: 4,
+    backgroundColor: Colors.light.background,
   },
-  sortChipActive: { backgroundColor: Colors.light.tint, borderColor: Colors.light.tint },
-  sortText: { fontSize: 13, color: Colors.light.text },
-  sortTextActive: { color: "#fff", fontWeight: "600" },
+  sortChipActive: { backgroundColor: Colors.light.primaryLight },
+  sortText: { fontSize: 13, color: Colors.light.textSecondary },
+  sortTextActive: { color: Colors.light.tint, fontWeight: "700" },
+  filterBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginLeft: "auto",
+    paddingHorizontal: 12,
+    borderLeftWidth: 1,
+    borderLeftColor: Colors.light.border,
+    height: "100%",
+  },
+  filterText: { fontSize: 13, color: Colors.light.text },
   resultCount: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 8,
-    color: Colors.light.textSecondary,
-    fontSize: 13,
+    fontSize: 12,
+    color: Colors.light.textMuted,
+    backgroundColor: Colors.light.surface,
   },
-  grid: { paddingHorizontal: 6, paddingBottom: 24 },
+  grid: { paddingBottom: 16 },
+  row: { paddingHorizontal: 4 },
   empty: {
     textAlign: "center",
     marginTop: 40,

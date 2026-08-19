@@ -1,20 +1,39 @@
-import { brand } from "@/lib/brand";
+import { shopee } from "@/lib/shopee-theme";
 
-/** Mirrors src/config/brand.ts — keep in sync with web */
-const palette = {
-  text: brand.theme.colors.text,
-  textSecondary: brand.theme.colors.textSecondary,
-  background: brand.theme.colors.background,
-  surface: brand.theme.colors.surface,
-  tint: brand.theme.colors.primary,
-  tabIconDefault: brand.theme.colors.textSecondary,
-  tabIconSelected: brand.theme.colors.primary,
-  border: brand.theme.colors.border,
-  promotional: brand.theme.colors.promotional,
-  error: brand.theme.colors.error,
-};
-
+/** Shopee-style palette for mobile */
 export default {
-  light: palette,
-  dark: palette,
+  light: {
+    text: shopee.colors.text,
+    textSecondary: shopee.colors.textSecondary,
+    textMuted: shopee.colors.textMuted,
+    background: shopee.colors.background,
+    surface: shopee.colors.surface,
+    tint: shopee.colors.primary,
+    tabIconDefault: shopee.colors.textMuted,
+    tabIconSelected: shopee.colors.primary,
+    border: shopee.colors.border,
+    promotional: shopee.colors.voucher,
+    error: shopee.colors.voucher,
+    primaryLight: shopee.colors.primaryLight,
+    freeShip: shopee.colors.freeShip,
+    mall: shopee.colors.mall,
+    star: shopee.colors.star,
+  },
+  dark: {
+    text: shopee.colors.text,
+    textSecondary: shopee.colors.textSecondary,
+    textMuted: shopee.colors.textMuted,
+    background: shopee.colors.background,
+    surface: shopee.colors.surface,
+    tint: shopee.colors.primary,
+    tabIconDefault: shopee.colors.textMuted,
+    tabIconSelected: shopee.colors.primary,
+    border: shopee.colors.border,
+    promotional: shopee.colors.voucher,
+    error: shopee.colors.voucher,
+    primaryLight: shopee.colors.primaryLight,
+    freeShip: shopee.colors.freeShip,
+    mall: shopee.colors.mall,
+    star: shopee.colors.star,
+  },
 };

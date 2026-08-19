@@ -1,9 +1,12 @@
+import { useMemo } from "react";
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 import { useCart } from "@/contexts/cart-context";
 import { formatCurrency } from "@/lib/format";
 import { brand } from "@/lib/brand";
+import type { CartItem } from "@/lib/types";
 import Colors from "@/constants/Colors";
 
 function productImage(slug: string, images: string[]) {
@@ -13,14 +16,32 @@ function productImage(slug: string, images: string[]) {
 export default function CartScreen() {
   const { items, itemCount, subtotal, removeItem, updateQuantity } = useCart();
 
+  const grouped = useMemo(() => {
+    const map = new Map<string, { sellerName: string; items: CartItem[] }>();
+    for (const item of items) {
+      const key = item.product.sellerId;
+      const existing = map.get(key);
+      if (existing) {
+        existing.items.push(item);
+      } else {
+        map.set(key, {
+          sellerName: item.product.seller.storeName,
+          items: [item],
+        });
+      }
+    }
+    return Array.from(map.entries());
+  }, [items]);
+
   if (itemCount === 0) {
     return (
       <View style={styles.empty}>
+        <Ionicons name="cart-outline" size={64} color={Colors.light.border} />
         <Text style={styles.emptyTitle}>Your cart is empty</Text>
-        <Text style={styles.emptyText}>Browse products and add items to get started.</Text>
-        <Link href="/search" asChild>
+        <Text style={styles.emptyText}>Add items to enjoy free shipping deals!</Text>
+        <Link href="/" asChild>
           <Pressable style={styles.shopBtn}>
-            <Text style={styles.shopBtnText}>Start shopping</Text>
+            <Text style={styles.shopBtnText}>Go Shopping</Text>
           </Pressable>
         </Link>
       </View>
@@ -33,68 +54,89 @@ export default function CartScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.voucherRow}>
+        <Ionicons name="ticket-outline" size={18} color={Colors.light.tint} />
+        <Text style={styles.voucherText}>Select or enter voucher</Text>
+        <Ionicons name="chevron-forward" size={16} color={Colors.light.textMuted} />
+      </View>
+
       <FlatList
-        data={items}
-        keyExtractor={(item) => item.id}
+        data={grouped}
+        keyExtractor={([sellerId]) => sellerId}
         contentContainerStyle={styles.list}
-        renderItem={({ item }) => {
-          const price = item.selectedVariant?.price ?? item.product.price;
-          return (
-            <View style={styles.item}>
-              <Image
-                source={{ uri: productImage(item.product.slug, item.product.images) }}
-                style={styles.thumb}
-              />
-              <View style={styles.itemBody}>
-                <Text style={styles.itemTitle} numberOfLines={2}>
-                  {item.product.title}
-                </Text>
-                <Text style={styles.itemPrice}>
-                  {formatCurrency(price, item.product.currency)}
-                </Text>
-                <View style={styles.qtyRow}>
-                  <Pressable
-                    style={styles.qtyBtn}
-                    onPress={() => updateQuantity(item.id, item.quantity - 1)}
-                    disabled={item.quantity <= 1}
-                  >
-                    <Text style={styles.qtyBtnText}>−</Text>
-                  </Pressable>
-                  <Text style={styles.qty}>{item.quantity}</Text>
-                  <Pressable
-                    style={styles.qtyBtn}
-                    onPress={() => updateQuantity(item.id, item.quantity + 1)}
-                  >
-                    <Text style={styles.qtyBtnText}>+</Text>
-                  </Pressable>
-                  <Pressable onPress={() => removeItem(item.id)} style={styles.removeBtn}>
-                    <Text style={styles.removeText}>Remove</Text>
-                  </Pressable>
-                </View>
-              </View>
+        renderItem={({ item: [sellerId, group] }) => (
+          <View style={styles.shopGroup}>
+            <View style={styles.shopHeader}>
+              <Ionicons name="storefront-outline" size={16} color={Colors.light.text} />
+              <Text style={styles.shopName}>{group.sellerName}</Text>
             </View>
-          );
-        }}
+            {group.items.map((item) => {
+              const price = item.selectedVariant?.price ?? item.product.price;
+              return (
+                <View key={item.id} style={styles.item}>
+                  <View style={styles.checkbox}>
+                    <Ionicons name="checkbox" size={20} color={Colors.light.tint} />
+                  </View>
+                  <Image
+                    source={{ uri: productImage(item.product.slug, item.product.images) }}
+                    style={styles.thumb}
+                  />
+                  <View style={styles.itemBody}>
+                    <Text style={styles.itemTitle} numberOfLines={2}>
+                      {item.product.title}
+                    </Text>
+                    <Text style={styles.itemPrice}>
+                      {formatCurrency(price, item.product.currency)}
+                    </Text>
+                    <View style={styles.qtyRow}>
+                      <Pressable
+                        style={styles.qtyBtn}
+                        onPress={() => updateQuantity(item.id, item.quantity - 1)}
+                        disabled={item.quantity <= 1}
+                      >
+                        <Text style={styles.qtyBtnText}>−</Text>
+                      </Pressable>
+                      <Text style={styles.qty}>{item.quantity}</Text>
+                      <Pressable
+                        style={styles.qtyBtn}
+                        onPress={() => updateQuantity(item.id, item.quantity + 1)}
+                      >
+                        <Text style={styles.qtyBtnText}>+</Text>
+                      </Pressable>
+                      <Pressable onPress={() => removeItem(item.id)} style={styles.removeBtn}>
+                        <Ionicons name="trash-outline" size={18} color={Colors.light.textMuted} />
+                      </Pressable>
+                    </View>
+                  </View>
+                </View>
+              );
+            })}
+          </View>
+        )}
       />
 
-      <View style={styles.summary}>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Subtotal</Text>
-          <Text style={styles.summaryValue}>{formatCurrency(subtotal)}</Text>
+      <View style={styles.footer}>
+        <View style={styles.footerTop}>
+          <View style={styles.selectAll}>
+            <Ionicons name="checkbox" size={20} color={Colors.light.tint} />
+            <Text style={styles.selectAllText}>Select All ({itemCount})</Text>
+          </View>
+          <View style={styles.totalWrap}>
+            <Text style={styles.totalLabel}>Total:</Text>
+            <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
+          </View>
         </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Delivery</Text>
-          <Text style={styles.summaryValue}>
-            {deliveryFee === 0 ? "Free" : formatCurrency(deliveryFee)}
+        {deliveryFee === 0 ? (
+          <Text style={styles.freeShipNote}>🎉 You qualify for free shipping!</Text>
+        ) : (
+          <Text style={styles.freeShipNote}>
+            Add {formatCurrency(brand.delivery.freeShippingThreshold - subtotal)} more for free
+            shipping
           </Text>
-        </View>
-        <View style={[styles.summaryRow, styles.totalRow]}>
-          <Text style={styles.totalLabel}>Total</Text>
-          <Text style={styles.totalValue}>{formatCurrency(total)}</Text>
-        </View>
-        <Text style={styles.note}>
-          Checkout on web for now — cart uses the same storage keys as the website.
-        </Text>
+        )}
+        <Pressable style={styles.checkoutBtn}>
+          <Text style={styles.checkoutText}>Check Out ({itemCount})</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -109,56 +151,87 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: Colors.light.background,
   },
-  emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.light.text },
+  emptyTitle: { marginTop: 16, fontSize: 18, fontWeight: "700", color: Colors.light.text },
   emptyText: { marginTop: 8, color: Colors.light.textSecondary, textAlign: "center" },
   shopBtn: {
     marginTop: 20,
     backgroundColor: Colors.light.tint,
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 8,
+    paddingHorizontal: 32,
+    paddingVertical: 12,
+    borderRadius: 4,
   },
   shopBtnText: { color: "#fff", fontWeight: "700" },
-  list: { padding: 12 },
+  voucherRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: Colors.light.surface,
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  voucherText: { flex: 1, color: Colors.light.text, fontSize: 14 },
+  list: { paddingBottom: 140 },
+  shopGroup: {
+    backgroundColor: Colors.light.surface,
+    marginTop: 8,
+  },
+  shopHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  shopName: { fontWeight: "700", color: Colors.light.text, fontSize: 14 },
   item: {
     flexDirection: "row",
-    backgroundColor: Colors.light.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: Colors.light.border,
     padding: 12,
-    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
   },
-  thumb: { width: 80, height: 80, borderRadius: 8, backgroundColor: Colors.light.background },
-  itemBody: { flex: 1, marginLeft: 12 },
-  itemTitle: { fontSize: 14, fontWeight: "600", color: Colors.light.text },
-  itemPrice: { marginTop: 4, fontSize: 15, fontWeight: "700", color: Colors.light.text },
+  checkbox: { justifyContent: "center", marginRight: 8 },
+  thumb: { width: 80, height: 80, borderRadius: 4, backgroundColor: Colors.light.background },
+  itemBody: { flex: 1, marginLeft: 10 },
+  itemTitle: { fontSize: 13, color: Colors.light.text, lineHeight: 18 },
+  itemPrice: { marginTop: 6, fontSize: 16, fontWeight: "700", color: Colors.light.tint },
   qtyRow: { flexDirection: "row", alignItems: "center", marginTop: 10, gap: 8 },
   qtyBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 6,
+    width: 28,
+    height: 28,
     borderWidth: 1,
     borderColor: Colors.light.border,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.light.background,
+    borderRadius: 2,
   },
-  qtyBtnText: { fontSize: 18, color: Colors.light.text },
+  qtyBtnText: { fontSize: 16, color: Colors.light.text },
   qty: { minWidth: 24, textAlign: "center", fontWeight: "600" },
   removeBtn: { marginLeft: "auto" },
-  removeText: { color: Colors.light.error, fontSize: 13 },
-  summary: {
+  footer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
     backgroundColor: Colors.light.surface,
     borderTopWidth: 1,
     borderTopColor: Colors.light.border,
-    padding: 16,
+    padding: 12,
   },
-  summaryRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 8 },
-  summaryLabel: { color: Colors.light.textSecondary },
-  summaryValue: { color: Colors.light.text, fontWeight: "600" },
-  totalRow: { marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: Colors.light.border },
-  totalLabel: { fontSize: 16, fontWeight: "700", color: Colors.light.text },
-  totalValue: { fontSize: 16, fontWeight: "700", color: Colors.light.text },
-  note: { marginTop: 12, fontSize: 12, color: Colors.light.textSecondary, textAlign: "center" },
+  footerTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  selectAll: { flexDirection: "row", alignItems: "center", gap: 8 },
+  selectAllText: { fontSize: 13, color: Colors.light.text },
+  totalWrap: { flexDirection: "row", alignItems: "baseline", gap: 4 },
+  totalLabel: { fontSize: 13, color: Colors.light.textSecondary },
+  totalValue: { fontSize: 20, fontWeight: "800", color: Colors.light.tint },
+  freeShipNote: { marginTop: 6, fontSize: 12, color: Colors.light.freeShip },
+  checkoutBtn: {
+    marginTop: 10,
+    backgroundColor: Colors.light.tint,
+    paddingVertical: 14,
+    borderRadius: 4,
+    alignItems: "center",
+  },
+  checkoutText: { color: "#fff", fontWeight: "800", fontSize: 16 },
 });

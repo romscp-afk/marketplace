@@ -27,7 +27,7 @@ export default function RootLayout() {
           }}
         >
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="product/[slug]" options={{ title: "Product" }} />
+          <Stack.Screen name="product/[slug]" options={{ headerShown: false }} />
           <Stack.Screen name="category/[slug]" options={{ title: "Category" }} />
         </Stack>
       </WishlistProvider>
