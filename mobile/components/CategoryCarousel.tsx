@@ -2,11 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import type { Category } from "@/lib/types";
+import { getCategoryImageSource } from "@/lib/category-images";
 import Colors from "@/constants/Colors";
-
-function categoryImage(slug: string, imageUrl?: string) {
-  return imageUrl ?? `https://picsum.photos/seed/cat-${slug}/120/120`;
-}
 
 export function CategoryCarousel({ categories }: { categories: Category[] }) {
   const router = useRouter();
@@ -21,8 +18,9 @@ export function CategoryCarousel({ categories }: { categories: Category[] }) {
         >
           <View style={styles.iconWrap}>
             <Image
-              source={{ uri: categoryImage(cat.slug, cat.imageUrl) }}
+              source={getCategoryImageSource(cat.slug, cat.imageUrl)}
               style={styles.icon}
+              resizeMode="cover"
             />
           </View>
           <Text style={styles.label} numberOfLines={2}>
