@@ -1,10 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { cn, formatCurrency } from "@/lib/utils";
 import { SafeImage } from "@/components/ui/safe-image";
-import { Rating } from "@/components/ui/rating";
-import { Badge } from "@/components/ui/badge";
+import {
+  discountPercent,
+  formatSoldCount,
+  showFreeShippingBadge,
+} from "@/lib/marketplace/helpers";
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +14,8 @@ interface ProductCardProps {
   isInWishlist?: boolean;
   className?: string;
   priority?: boolean;
+  variant?: "grid" | "flash";
+  featured?: boolean;
 }
 
 export function ProductCard({
@@ -20,96 +24,94 @@ export function ProductCard({
   isInWishlist = false,
   className,
   priority = false,
+  variant = "grid",
+  featured = false,
 }: ProductCardProps) {
-  const hasDiscount =
-    product.compareAtPrice && product.compareAtPrice > product.price;
-  const discountPercent = hasDiscount
-    ? Math.round(
-        ((product.compareAtPrice! - product.price) / product.compareAtPrice!) *
-          100,
-      )
-    : 0;
+  const discount = discountPercent(product.price, product.compareAtPrice);
+  const isFlash = variant === "flash";
+  const currencyPrefix = product.currency === "SGD" ? "S$" : "$";
 
   return (
     <article
-      className={cn("group relative flex flex-col", className)}
+      className={cn(
+        "group relative flex flex-col bg-surface",
+        isFlash ? "overflow-hidden rounded border border-border" : "m-1",
+        className,
+      )}
       aria-label={product.title}
     >
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-surface">
-        <Link
-          href={`/products/${product.slug}`}
-          className="block h-full"
-          aria-label={`View ${product.title}`}
-        >
+      <div className="relative aspect-square bg-background">
+        <Link href={`/products/${product.slug}`} className="block h-full" aria-label={product.title}>
           <SafeImage
             src={product.images[0] ?? "/images/placeholder-product.svg"}
             alt={product.title}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, 25vw"
+            className="object-cover"
             priority={priority}
           />
         </Link>
 
-        {hasDiscount ? (
-          <Badge variant="promotional" className="absolute top-2 left-2">
-            -{discountPercent}%
-          </Badge>
+        {discount ? (
+          <span className="absolute top-0 right-0 bg-discount px-1.5 py-0.5 text-[11px] font-bold text-white">
+            -{discount}%
+          </span>
         ) : null}
 
-        {product.stock === 0 ? (
-          <Badge variant="default" className="absolute top-2 right-2">
-            Out of stock
-          </Badge>
+        {featured || product.seller.isVerified ? (
+          <span className="absolute bottom-0 left-0 bg-featured px-1.5 py-0.5 text-[9px] font-bold text-white">
+            Featured
+          </span>
         ) : null}
 
         {onAddToWishlist ? (
           <button
             type="button"
             onClick={() => onAddToWishlist(product.id)}
-            className={cn(
-              "absolute right-2 bottom-2 flex h-9 w-9 items-center justify-center rounded-full",
-              "bg-surface/90 shadow-sm backdrop-blur-sm transition-colors",
-              "hover:bg-surface focus-visible:ring-2 focus-visible:ring-primary",
-              isInWishlist && "text-promotional",
-            )}
-            aria-label={
-              isInWishlist ? "Remove from wishlist" : "Add to wishlist"
-            }
+            className="absolute top-1.5 left-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-white/85 text-xs"
+            aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
             aria-pressed={isInWishlist}
           >
-            <span aria-hidden="true">{isInWishlist ? "♥" : "♡"}</span>
+            <span className={isInWishlist ? "text-discount" : undefined} aria-hidden="true">
+              {isInWishlist ? "♥" : "♡"}
+            </span>
           </button>
         ) : null}
       </div>
 
-      <div className="mt-3 flex flex-1 flex-col gap-1">
-        <Link
-          href={`/products/${product.slug}`}
-          className="line-clamp-2 text-sm leading-snug font-medium text-foreground hover:text-primary"
-        >
-          {product.title}
-        </Link>
+      <div className="flex flex-1 flex-col p-2">
+        {!isFlash ? (
+          <Link
+            href={`/products/${product.slug}`}
+            className="line-clamp-2 min-h-[34px] text-[13px] leading-snug text-product-title"
+          >
+            {product.title}
+          </Link>
+        ) : null}
 
-        <Link
-          href={`/sellers/${product.seller.slug}`}
-          className="text-muted text-xs hover:text-primary"
-        >
-          {product.seller.storeName}
-        </Link>
-
-        <Rating rating={product.rating} reviewCount={product.reviewCount} />
-
-        <div className="mt-auto flex items-baseline gap-2 pt-1">
-          <span className="text-foreground text-base font-semibold">
-            {formatCurrency(product.price, product.currency)}
+        <div className="mt-1 flex items-start gap-0.5">
+          <span className="mt-0.5 text-xs font-semibold text-price">{currencyPrefix}</span>
+          <span className="text-lg font-bold text-price">
+            {product.price.toFixed(product.price % 1 === 0 ? 0 : 2)}
           </span>
-          {hasDiscount ? (
-            <span className="text-muted text-sm line-through">
-              {formatCurrency(product.compareAtPrice!, product.currency)}
-            </span>
-          ) : null}
         </div>
+
+        {!isFlash && product.compareAtPrice && product.compareAtPrice > product.price ? (
+          <span className="text-[11px] text-discount line-through">
+            {formatCurrency(product.compareAtPrice, product.currency)}
+          </span>
+        ) : null}
+
+        <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+          <span className="text-muted">★ {product.rating.toFixed(1)}</span>
+          <span className="text-muted/80">{formatSoldCount(product.reviewCount)}</span>
+        </div>
+
+        {showFreeShippingBadge(product.price, product.deliveryFee) ? (
+          <span className="mt-1.5 self-start rounded border border-success/40 bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-success">
+            Free Shipping
+          </span>
+        ) : null}
       </div>
     </article>
   );

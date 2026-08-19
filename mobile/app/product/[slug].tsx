@@ -15,7 +15,7 @@ import { LoadingView } from "@/components/LoadingView";
 import { ProductCard } from "@/components/ProductCard";
 import { fetchProduct } from "@/lib/api";
 import { formatCurrency } from "@/lib/format";
-import { discountPercent, formatSoldCount } from "@/lib/shopee-theme";
+import { discountPercent, formatSoldCount } from "@/lib/marketplace-ui";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
 import type { Product } from "@/lib/types";
@@ -212,17 +212,17 @@ const styles = StyleSheet.create({
   },
   flashLabel: { color: Colors.light.tint, fontWeight: "700", fontSize: 13 },
   priceRow: { flexDirection: "row", alignItems: "flex-end", gap: 4 },
-  currency: { color: Colors.light.tint, fontWeight: "700", fontSize: 16, marginBottom: 4 },
-  price: { color: Colors.light.tint, fontWeight: "800", fontSize: 28 },
+  currency: { color: Colors.light.price, fontWeight: "700", fontSize: 16, marginBottom: 4 },
+  price: { color: Colors.light.price, fontWeight: "800", fontSize: 28 },
   comparePrice: {
     marginLeft: 8,
     marginBottom: 6,
-    color: Colors.light.textMuted,
+    color: Colors.light.discount,
     textDecorationLine: "line-through",
     fontSize: 14,
   },
   body: { backgroundColor: Colors.light.surface, padding: 12, marginTop: 8 },
-  title: { fontSize: 16, fontWeight: "500", color: Colors.light.text, lineHeight: 22 },
+  title: { fontSize: 16, fontWeight: "500", color: Colors.light.productTitle, lineHeight: 22 },
   statsRow: { flexDirection: "row", alignItems: "center", marginTop: 10, gap: 8 },
   rating: { color: Colors.light.tint, fontWeight: "600", fontSize: 13 },
   sold: { color: Colors.light.textMuted, fontSize: 13 },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   qty: { minWidth: 28, textAlign: "center", fontWeight: "600" },
   addCartBtn: {
     flex: 1,
-    backgroundColor: "#FFB800",
+    backgroundColor: Colors.light.cartButton,
     paddingVertical: 12,
     borderRadius: 4,
     alignItems: "center",

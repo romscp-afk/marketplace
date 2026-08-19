@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
+import { MobileMallView } from "@/components/marketplace/mobile-mall-view";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -75,7 +76,17 @@ function SearchContent() {
   ].filter(Boolean) as { key: string; label: string }[];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <>
+      <MobileMallView
+        query={query}
+        sort={sort}
+        total={results.total}
+        products={results.data}
+        isInWishlist={isInWishlist}
+        onToggleWishlist={toggleWishlist}
+      />
+
+      <div className="mx-auto hidden max-w-7xl px-4 py-8 md:block">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-semibold">
@@ -184,6 +195,7 @@ function SearchContent() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

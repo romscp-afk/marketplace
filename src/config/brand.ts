@@ -65,27 +65,34 @@ export const brand = {
     windowDays: 30,
   },
 
-  /** UXguard brand palette — teal #0eb5bd · navy #001334 */
+  /** Marketplace palette — emerald header · warm cream background */
   theme: {
     colors: {
-      primary: "#0EB5BD",
-      primaryDark: "#0C9AA1",
-      background: "#F4F7FB",
+      primary: "#064E3B",
+      primaryDark: "#043326",
+      background: "#FFFCF5",
       surface: "#FFFFFF",
-      accent: "#3ECED4",
-      promotional: "#DF654B",
-      text: "#001334",
-      textSecondary: "#5A7390",
-      border: "#E8EEF6",
-      success: "#0C9AA1",
-      warning: "#D68A18",
-      error: "#C43D4B",
+      accent: "#047857",
+      promotional: "#B91C1C",
+      text: "#1F2937",
+      textSecondary: "#6B7280",
+      border: "#E5E7EB",
+      success: "#047857",
+      warning: "#D4A017",
+      error: "#B91C1C",
+      /** Semantic product UI tokens */
+      header: "#064E3B",
+      productTitle: "#1F2937",
+      price: "#064E3B",
+      discount: "#B91C1C",
+      cartButton: "#047857",
+      featured: "#D4A017",
     },
   },
 
   pwa: {
-    themeColor: "#0EB5BD",
-    backgroundColor: "#F4F7FB",
+    themeColor: "#064E3B",
+    backgroundColor: "#FFFCF5",
   },
 
   announcement: {

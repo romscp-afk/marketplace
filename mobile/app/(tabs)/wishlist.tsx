@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   emptyText: { marginTop: 8, color: Colors.light.textSecondary, textAlign: "center" },
   shopBtn: {
     marginTop: 20,
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.cartButton,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 4,

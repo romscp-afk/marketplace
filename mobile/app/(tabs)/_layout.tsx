@@ -3,6 +3,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "@/constants/Colors";
 import { useCart } from "@/contexts/cart-context";
+import { marketplaceUi } from "@/lib/marketplace-ui";
+
+const tabLabels = Object.fromEntries(marketplaceUi.tabs.map((t) => [t.id, t.label]));
 
 export default function TabLayout() {
   const { itemCount } = useCart();
@@ -10,7 +13,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.light.tint,
+        tabBarActiveTintColor: Colors.light.header,
         tabBarInactiveTintColor: Colors.light.tabIconDefault,
         tabBarStyle: {
           backgroundColor: Colors.light.surface,
@@ -25,7 +28,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: tabLabels.home,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -34,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: "Mall",
+          title: tabLabels.mall,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="bag-handle-outline" size={size} color={color} />
           ),
@@ -43,14 +46,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cart"
         options={{
-          title: "Cart",
+          title: tabLabels.cart,
           tabBarBadge: itemCount > 0 ? itemCount : undefined,
-          tabBarBadgeStyle: { backgroundColor: Colors.light.tint, fontSize: 10 },
+          tabBarBadgeStyle: { backgroundColor: Colors.light.header, fontSize: 10 },
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),
           headerShown: true,
-          headerStyle: { backgroundColor: Colors.light.tint },
+          headerStyle: { backgroundColor: Colors.light.header },
           headerTintColor: "#fff",
           headerTitle: "Shopping Cart",
         }}
@@ -58,12 +61,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="wishlist"
         options={{
-          title: "Noti",
+          title: tabLabels.noti,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="notifications-outline" size={size} color={color} />
           ),
           headerShown: true,
-          headerStyle: { backgroundColor: Colors.light.tint },
+          headerStyle: { backgroundColor: Colors.light.header },
           headerTintColor: "#fff",
           headerTitle: "My Likes",
         }}
@@ -71,7 +74,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="account"
         options={{
-          title: "Me",
+          title: tabLabels.me,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={size} color={color} />
           ),

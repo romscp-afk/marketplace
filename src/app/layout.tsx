@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { brand } from "@/config/brand";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
-import { Header } from "@/components/layout/header";
+import { SiteHeader } from "@/components/layout/site-header";
 import { Footer } from "@/components/layout/footer";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { PwaInstallPrompt } from "@/components/pwa/install-prompt";
@@ -63,10 +63,14 @@ export default function RootLayout({
         <CartProvider>
           <CartFeedbackProvider>
             <WishlistProvider>
-              <AnnouncementBar />
-              <Header />
+              <div className="hidden md:block">
+                <AnnouncementBar />
+              </div>
+              <SiteHeader />
               <main className="flex-1 pb-16 md:pb-0">{children}</main>
-              <Footer />
+              <div className="hidden md:block">
+                <Footer />
+              </div>
               <MobileBottomNav />
               <PwaInstallPrompt />
               <ServiceWorkerRegistration />

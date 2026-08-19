@@ -121,7 +121,7 @@ export default function AccountScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.light.background },
   header: {
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.header,
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   stat: { flex: 1, alignItems: "center" },
-  statValue: { fontSize: 18, fontWeight: "800", color: Colors.light.tint },
+  statValue: { fontSize: 18, fontWeight: "800", color: Colors.light.price },
   statLabel: { marginTop: 4, fontSize: 11, color: Colors.light.textSecondary },
   statDivider: { width: 1, backgroundColor: Colors.light.border },
   orderSection: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   orderHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
   orderTitle: { fontWeight: "700", color: Colors.light.text },
-  orderLink: { color: Colors.light.tint, fontSize: 13 },
+  orderLink: { color: Colors.light.header, fontSize: 13 },
   orderIcons: { flexDirection: "row", justifyContent: "space-around" },
   orderItem: { alignItems: "center", gap: 6 },
   orderLabel: { fontSize: 11, color: Colors.light.textSecondary },

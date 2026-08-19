@@ -3,6 +3,7 @@ import { navigation } from "@/config/navigation";
 import { getUser } from "@/lib/auth/session";
 import { isSupabaseConfigured } from "@/lib/env";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { MobileAccountView } from "@/components/marketplace/mobile-account-view";
 import {
   LayoutDashboard,
   Package,
@@ -35,7 +36,13 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const user = isSupabaseConfigured() ? await getUser() : null;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <>
+      <MobileAccountView
+        userName={user ? (user.firstName ?? user.email) : null}
+        userEmail={user?.email ?? null}
+      />
+
+      <div className="mx-auto hidden max-w-7xl px-4 py-8 md:block">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="font-display text-2xl font-semibold">My account</h1>
         {user ? <SignOutButton /> : null}
@@ -120,5 +127,6 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }

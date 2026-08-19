@@ -7,6 +7,7 @@ import {
 import { getCategories } from "@/lib/data/categories";
 import { seedSellers } from "@/data/seed";
 import { brand } from "@/config/brand";
+import { marketplaceUi } from "@/config/marketplace-ui";
 import {
   mobileJsonResponse,
   mobileOptionsResponse,
@@ -35,6 +36,7 @@ export async function GET() {
       theme: brand.theme,
       announcement: brand.announcement,
     },
+    ui: marketplaceUi,
     sections: {
       featured,
       trending,

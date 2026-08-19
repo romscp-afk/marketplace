@@ -9,6 +9,7 @@ import { brand } from "@/config/brand";
 import { formatCurrency, clamp } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
+import { MobileCartView } from "@/components/marketplace/mobile-cart-view";
 
 export default function CartPage() {
   const {
@@ -63,17 +64,24 @@ export default function CartPage() {
 
   if (itemCount === 0 && savedItems.length === 0) {
     return (
-      <EmptyState
-        icon={<ShoppingBag className="h-12 w-12" />}
-        title="Your cart is empty"
-        description="Browse our products and add items to your cart."
-        action={{ label: "Continue shopping", href: "/search" }}
-      />
+      <>
+        <MobileCartView />
+        <div className="hidden md:block">
+          <EmptyState
+            icon={<ShoppingBag className="h-12 w-12" />}
+            title="Your cart is empty"
+            description="Browse our products and add items to your cart."
+            action={{ label: "Continue shopping", href: "/search" }}
+          />
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <>
+      <MobileCartView />
+      <div className="mx-auto hidden max-w-7xl px-4 py-8 md:block">
       <h1 className="font-display mb-8 text-2xl font-semibold">
         Shopping cart ({itemCount})
       </h1>
@@ -267,7 +275,7 @@ export default function CartPage() {
 
           <Link
             href="/checkout"
-            className="bg-primary text-primary-foreground hover:bg-primary-dark mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg text-base font-medium transition-colors"
+            className="bg-cart hover:bg-cart/90 mt-6 inline-flex h-12 w-full items-center justify-center rounded-lg text-base font-medium text-white transition-colors"
           >
             Proceed to checkout
           </Link>
@@ -280,5 +288,6 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

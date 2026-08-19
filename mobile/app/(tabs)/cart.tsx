@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   emptyText: { marginTop: 8, color: Colors.light.textSecondary, textAlign: "center" },
   shopBtn: {
     marginTop: 20,
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.cartButton,
     paddingHorizontal: 32,
     paddingVertical: 12,
     borderRadius: 4,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   thumb: { width: 80, height: 80, borderRadius: 4, backgroundColor: Colors.light.background },
   itemBody: { flex: 1, marginLeft: 10 },
   itemTitle: { fontSize: 13, color: Colors.light.text, lineHeight: 18 },
-  itemPrice: { marginTop: 6, fontSize: 16, fontWeight: "700", color: Colors.light.tint },
+  itemPrice: { marginTop: 6, fontSize: 16, fontWeight: "700", color: Colors.light.price },
   qtyRow: { flexDirection: "row", alignItems: "center", marginTop: 10, gap: 8 },
   qtyBtn: {
     width: 28,
@@ -224,11 +224,11 @@ const styles = StyleSheet.create({
   selectAllText: { fontSize: 13, color: Colors.light.text },
   totalWrap: { flexDirection: "row", alignItems: "baseline", gap: 4 },
   totalLabel: { fontSize: 13, color: Colors.light.textSecondary },
-  totalValue: { fontSize: 20, fontWeight: "800", color: Colors.light.tint },
+  totalValue: { fontSize: 20, fontWeight: "800", color: Colors.light.price },
   freeShipNote: { marginTop: 6, fontSize: 12, color: Colors.light.freeShip },
   checkoutBtn: {
     marginTop: 10,
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.cartButton,
     paddingVertical: 14,
     borderRadius: 4,
     alignItems: "center",

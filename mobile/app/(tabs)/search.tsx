@@ -13,7 +13,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { ProductCard } from "@/components/ProductCard";
 import { LoadingView } from "@/components/LoadingView";
 import { fetchProducts } from "@/lib/api";
-import { shopee } from "@/lib/shopee-theme";
+import { marketplaceUi } from "@/lib/marketplace-ui";
 import type { Product } from "@/lib/types";
 import { useWishlist } from "@/contexts/wishlist-context";
 import Colors from "@/constants/Colors";
@@ -67,7 +67,7 @@ export default function SearchScreen() {
         <View style={styles.trending}>
           <Text style={styles.trendingTitle}>Trending Searches</Text>
           <View style={styles.trendingChips}>
-            {shopee.trendingSearches.map((term) => (
+            {marketplaceUi.trendingSearches.map((term) => (
               <Pressable key={term} style={styles.trendChip} onPress={() => setQuery(term)}>
                 <Ionicons name="trending-up" size={12} color={Colors.light.tint} />
                 <Text style={styles.trendText}>{term}</Text>
@@ -131,7 +131,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.light.background },
   header: {
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.header,
     paddingHorizontal: 12,
     paddingBottom: 10,
   },
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   sortChipActive: { backgroundColor: Colors.light.primaryLight },
   sortText: { fontSize: 13, color: Colors.light.textSecondary },
-  sortTextActive: { color: Colors.light.tint, fontWeight: "700" },
+  sortTextActive: { color: Colors.light.header, fontWeight: "700" },
   filterBtn: {
     flexDirection: "row",
     alignItems: "center",

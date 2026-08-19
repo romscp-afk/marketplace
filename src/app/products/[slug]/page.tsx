@@ -112,7 +112,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductGallery images={product.images} title={product.title} />
 
           <div>
-            <h1 className="font-display text-2xl font-semibold md:text-3xl">
+            <h1 className="font-display text-2xl font-semibold text-product-title md:text-3xl">
               {product.title}
             </h1>
 
@@ -137,12 +137,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
 
             <div className="mt-4 flex items-baseline gap-3">
-              <span className="text-2xl font-semibold">
+              <span className="text-2xl font-semibold text-price">
                 {formatCurrency(product.price, product.currency)}
               </span>
               {hasDiscount ? (
                 <>
-                  <span className="text-muted text-lg line-through">
+                  <span className="text-lg text-discount line-through">
                     {formatCurrency(product.compareAtPrice!, product.currency)}
                   </span>
                   <Badge variant="promotional">

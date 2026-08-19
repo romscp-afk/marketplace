@@ -134,6 +134,7 @@ export function ProductActions({ product }: ProductActionsProps) {
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button
           fullWidth
+          variant="accent"
           onClick={handleAddToCart}
           disabled={!canPurchase || adding}
           isLoading={adding}

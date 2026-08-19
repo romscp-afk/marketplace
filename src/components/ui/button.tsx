@@ -17,7 +17,7 @@ const variantStyles = {
     "border border-primary text-primary bg-transparent hover:bg-primary/5",
   ghost: "text-foreground hover:bg-background",
   destructive: "bg-error text-white hover:bg-error/90",
-  accent: "bg-accent text-foreground hover:bg-accent/90",
+  accent: "bg-cart text-white hover:bg-cart/90 focus-visible:ring-cart",
 };
 
 const sizeStyles = {

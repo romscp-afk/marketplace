@@ -147,14 +147,14 @@ const styles = StyleSheet.create({
   errorText: { marginTop: 8, color: Colors.light.textSecondary, textAlign: "center" },
   retryBtn: {
     marginTop: 16,
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.cartButton,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 4,
   },
   retryText: { color: "#fff", fontWeight: "600" },
   header: {
-    backgroundColor: Colors.light.tint,
+    backgroundColor: Colors.light.header,
     paddingHorizontal: 12,
     paddingBottom: 10,
   },
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   discoverTitle: {
     fontSize: 15,
     fontWeight: "700",
-    color: Colors.light.tint,
+    color: Colors.light.header,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },

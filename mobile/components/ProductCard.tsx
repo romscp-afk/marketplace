@@ -2,7 +2,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import type { Product } from "@/lib/types";
 import { formatCurrency } from "@/lib/format";
-import { discountPercent, formatSoldCount } from "@/lib/shopee-theme";
+import { discountPercent, formatSoldCount } from "@/lib/marketplace-ui";
 import Colors from "@/constants/Colors";
 
 interface ProductCardProps {
@@ -40,8 +40,8 @@ export function ProductCard({
           </View>
         ) : null}
         {product.seller.isVerified ? (
-          <View style={styles.mallBadge}>
-            <Text style={styles.mallText}>Mall</Text>
+          <View style={styles.featuredBadge}>
+            <Text style={styles.featuredText}>Featured</Text>
           </View>
         ) : null}
         {onToggleWishlist ? (
@@ -119,21 +119,21 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     right: 0,
-    backgroundColor: Colors.light.promotional,
+    backgroundColor: Colors.light.discount,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderBottomLeftRadius: 4,
   },
   discountText: { color: "#fff", fontSize: 11, fontWeight: "700" },
-  mallBadge: {
+  featuredBadge: {
     position: "absolute",
     bottom: 0,
     left: 0,
-    backgroundColor: Colors.light.mall,
+    backgroundColor: Colors.light.featured,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
-  mallText: { color: "#fff", fontSize: 9, fontWeight: "700" },
+  featuredText: { color: "#fff", fontSize: 9, fontWeight: "700" },
   wishlistBtn: {
     position: "absolute",
     top: 6,
@@ -149,16 +149,16 @@ const styles = StyleSheet.create({
   body: { padding: 8 },
   title: {
     fontSize: 13,
-    color: Colors.light.text,
+    color: Colors.light.productTitle,
     lineHeight: 17,
     minHeight: 34,
   },
   priceRow: { flexDirection: "row", alignItems: "flex-start", marginTop: 4 },
-  currency: { fontSize: 12, color: Colors.light.tint, fontWeight: "600", marginTop: 2 },
-  price: { fontSize: 18, color: Colors.light.tint, fontWeight: "700" },
+  currency: { fontSize: 12, color: Colors.light.price, fontWeight: "600", marginTop: 2 },
+  price: { fontSize: 18, color: Colors.light.price, fontWeight: "700" },
   comparePrice: {
     fontSize: 11,
-    color: Colors.light.textMuted,
+    color: Colors.light.discount,
     textDecorationLine: "line-through",
     marginTop: 2,
   },

@@ -1,20 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  /* UXguard brand colors — teal #0eb5bd · navy #001334 */
-  --color-primary: #0eb5bd;
-  --color-primary-dark: #0c9aa1;
+  /* Marketplace palette */
+  --color-primary: #064e3b;
+  --color-primary-dark: #043326;
   --color-primary-foreground: #ffffff;
-  --color-background: #f4f7fb;
+  --color-background: #fffcf5;
   --color-surface: #ffffff;
-  --color-accent: #3eced4;
-  --color-promotional: #df654b;
-  --color-foreground: #001334;
-  --color-muted: #5a7390;
-  --color-border: #e8eef6;
-  --color-success: #0c9aa1;
-  --color-warning: #d68a18;
-  --color-error: #c43d4b;
+  --color-accent: #047857;
+  --color-promotional: #b91c1c;
+  --color-foreground: #1f2937;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #047857;
+  --color-warning: #d4a017;
+  --color-error: #b91c1c;
+  --color-product-title: #1f2937;
+  --color-price: #064e3b;
+  --color-discount: #b91c1c;
+  --color-cart: #047857;
+  --color-featured: #d4a017;
+  --color-header: #064e3b;
 
   /* Semantic aliases */
   --color-ring: var(--color-primary);

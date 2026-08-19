@@ -8,8 +8,8 @@ import type { Product } from "@/lib/types";
 import {
   flashSaleEndsAt,
   formatCountdown,
-  shopee,
-} from "@/lib/shopee-theme";
+  marketplaceUi,
+} from "@/lib/marketplace-ui";
 import Colors from "@/constants/Colors";
 
 interface FlashSaleSectionProps {
@@ -73,7 +73,7 @@ export function BannerCarousel() {
       pagingEnabled
       contentContainerStyle={styles.bannerList}
     >
-      {shopee.banners.map((item) => (
+      {marketplaceUi.banners.map((item) => (
         <View key={item.id} style={[styles.banner, { backgroundColor: item.color }]}>
           <Text style={styles.bannerTitle}>{item.title}</Text>
           <Text style={styles.bannerSub}>{item.subtitle}</Text>
@@ -87,21 +87,19 @@ export function QuickActions() {
   const router = useRouter();
   const iconMap = {
     flash: "flash-outline",
-    ticket: "ticket-outline",
-    car: "car-outline",
-    storefront: "storefront-outline",
-    pricetag: "pricetag-outline",
+    voucher: "ticket-outline",
+    freeship: "car-outline",
+    mall: "storefront-outline",
+    deals: "pricetag-outline",
   } as const;
 
   return (
     <View style={styles.actions}>
-      {shopee.quickActions.map((action) => (
+      {marketplaceUi.quickActions.map((action) => (
         <Pressable
           key={action.id}
           style={styles.actionItem}
-          onPress={() =>
-            router.push(action.id === "mall" ? "/search?seller=verified" : "/search?sort=deals")
-          }
+          onPress={() => router.push(action.path as never)}
         >
           <View
             style={[
@@ -109,7 +107,11 @@ export function QuickActions() {
               { backgroundColor: `${action.color}18` },
             ]}
           >
-            <Ionicons name={iconMap[action.icon]} size={22} color={action.color} />
+            <Ionicons
+              name={iconMap[action.id as keyof typeof iconMap]}
+              size={22}
+              color={action.color}
+            />
           </View>
           <Text style={styles.actionLabel}>{action.label}</Text>
         </Pressable>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: shopee.colors.primary,
+    backgroundColor: Colors.light.header,
     paddingHorizontal: 12,
     paddingVertical: 10,
     gap: 10,
