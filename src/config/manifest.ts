@@ -11,19 +11,13 @@ export const manifest = {
   orientation: "portrait-primary",
   icons: [
     {
-      src: "/icons/icon-192x192",
-      sizes: "192x192",
-      type: "image/png",
-      purpose: "any",
-    },
-    {
-      src: "/icons/icon-512x512",
+      src: "/brand/aromza-logo.png",
       sizes: "512x512",
       type: "image/png",
       purpose: "any",
     },
     {
-      src: "/icons/icon-512x512",
+      src: "/brand/aromza-logo.png",
       sizes: "512x512",
       type: "image/png",
       purpose: "maskable",

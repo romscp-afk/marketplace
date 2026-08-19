@@ -1,6 +1,6 @@
 /** Mirrors src/config/brand.ts — keep in sync with web */
 export const brand = {
-  name: "Marketplace",
+  name: "Aromza",
   tagline: "Discover premium products from trusted sellers",
   locale: {
     default: "en-SG",

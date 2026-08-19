@@ -3,16 +3,17 @@
  * Update this file to rebrand the entire application.
  */
 export const brand = {
-  name: "Marketplace",
-  shortName: "Market",
+  name: "Aromza",
+  shortName: "Aromza",
   tagline: "Discover premium products from trusted sellers",
   description:
-    "A premium multi-vendor marketplace for discovering and buying quality products from independent sellers.",
+    "Aromza is a premium multi-vendor marketplace for discovering and buying quality products from independent sellers.",
 
   logo: {
-    light: "/brand/logo-light.svg",
-    dark: "/brand/logo-dark.svg",
-    icon: "/brand/icon.svg",
+    full: "/brand/aromza-logo.png",
+    light: "/brand/aromza-logo.png",
+    dark: "/brand/aromza-logo.png",
+    icon: "/brand/aromza-logo.png",
   },
 
   favicon: {

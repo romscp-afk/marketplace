@@ -15,6 +15,7 @@ import {
 import { brand } from "@/config/brand";
 import { navigation } from "@/config/navigation";
 import { useCart } from "@/contexts/cart-context";
+import { BrandLogo } from "@/components/brand/brand-logo";
 
 export function Header() {
   const { itemCount } = useCart();
@@ -43,18 +44,7 @@ export function Header() {
             <Menu className="h-5 w-5" />
           </button>
 
-          <Link href="/" className="flex shrink-0 items-center gap-2">
-            <Image
-              src={brand.logo.light}
-              alt={brand.name}
-              width={32}
-              height={32}
-              className="h-8 w-8"
-            />
-            <span className="font-display hidden text-lg font-semibold sm:inline">
-              {brand.name}
-            </span>
-          </Link>
+          <BrandLogo height={32} />
 
           {/* Desktop search */}
           <form
@@ -191,9 +181,7 @@ export function Header() {
             aria-label="Mobile navigation"
           >
             <div className="mb-6 flex items-center justify-between">
-              <span className="font-display text-lg font-semibold">
-                {brand.name}
-              </span>
+              <BrandLogo height={28} />
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
