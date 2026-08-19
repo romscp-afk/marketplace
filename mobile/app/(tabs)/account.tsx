@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 
-import { fetchHealth, getApiBaseUrl } from "@/lib/api";
+import { getApiBaseUrl } from "@/lib/api";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
 import Colors from "@/constants/Colors";
@@ -22,14 +21,7 @@ export default function AccountScreen() {
   const insets = useSafeAreaInsets();
   const { itemCount } = useCart();
   const { productIds } = useWishlist();
-  const [health, setHealth] = useState("...");
   const webUrl = getApiBaseUrl();
-
-  useEffect(() => {
-    fetchHealth()
-      .then((h) => setHealth(h.status))
-      .catch(() => setHealth("offline"));
-  }, []);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
@@ -111,8 +103,8 @@ export default function AccountScreen() {
       </View>
 
       <View style={styles.meta}>
-        <Text style={styles.metaText}>API: {webUrl}</Text>
-        <Text style={styles.metaText}>Status: {health}</Text>
+        <Text style={styles.metaText}>Aromza — Discover More, From A to Z</Text>
+        <Text style={styles.metaText}>© {new Date().getFullYear()} UXguard</Text>
       </View>
     </ScrollView>
   );
