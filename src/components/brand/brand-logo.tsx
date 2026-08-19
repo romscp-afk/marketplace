@@ -4,7 +4,7 @@ import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
-  /** Use white pill background for emerald/dark surfaces */
+  /** Lighten logo for emerald/dark surfaces — no background, transparent PNG only */
   onDark?: boolean;
   height?: number;
   className?: string;
@@ -27,25 +27,23 @@ export function BrandLogo({
       alt={brand.name}
       width={width}
       height={height}
-      className={cn("object-contain object-left", className)}
+      className={cn(
+        "object-contain object-left",
+        onDark && "brightness-0 invert",
+        className,
+      )}
       style={{ height, width: "auto", maxWidth: width }}
       priority={priority}
     />
   );
 
-  const content = onDark ? (
-    <span className="inline-flex rounded bg-white px-2 py-0.5">{logo}</span>
-  ) : (
-    logo
-  );
-
   if (href) {
     return (
       <Link href={href} className="inline-flex shrink-0 items-center" aria-label={brand.name}>
-        {content}
+        {logo}
       </Link>
     );
   }
 
-  return content;
+  return logo;
 }

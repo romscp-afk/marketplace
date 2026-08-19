@@ -89,9 +89,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <View style={styles.headerTop}>
-          <View style={styles.logoWrap}>
-            <Image source={aromzaLogo} style={styles.logo} resizeMode="contain" />
-          </View>
+          <Image source={aromzaLogo} style={styles.logo} resizeMode="contain" />
           <View style={styles.headerIcons}>
             <Ionicons name="chatbubble-ellipses-outline" size={22} color="#fff" />
             <Ionicons name="cart-outline" size={22} color="#fff" style={styles.headerIconGap} />
@@ -168,12 +166,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 10,
-  },
-  logoWrap: {
-    backgroundColor: "#fff",
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
   },
   logo: { width: 96, height: 24 },
   headerIcons: { flexDirection: "row", alignItems: "center" },
