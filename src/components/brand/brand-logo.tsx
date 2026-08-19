@@ -4,8 +4,6 @@ import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
-  /** Lighten logo for emerald/dark surfaces — no background, transparent PNG only */
-  onDark?: boolean;
   height?: number;
   className?: string;
   href?: string;
@@ -13,7 +11,6 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({
-  onDark = false,
   height = 28,
   className,
   href = "/",
@@ -27,13 +24,10 @@ export function BrandLogo({
       alt={brand.name}
       width={width}
       height={height}
-      className={cn(
-        "object-contain object-left",
-        onDark && "brightness-0 invert",
-        className,
-      )}
+      className={cn("object-contain object-left", className)}
       style={{ height, width: "auto", maxWidth: width }}
       priority={priority}
+      unoptimized
     />
   );
 

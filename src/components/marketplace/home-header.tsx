@@ -12,7 +12,7 @@ export function MarketplaceHomeHeader() {
   return (
     <div className="bg-header px-3 pt-2 pb-2.5 md:hidden">
       <div className="mb-2.5 flex items-center justify-between">
-        <BrandLogo onDark height={26} priority />
+        <BrandLogo height={26} priority />
         <div className="flex items-center gap-4 text-white">
           <MessageCircle className="h-5 w-5" aria-hidden="true" />
           <Link href="/cart" className="relative" aria-label="Cart">
