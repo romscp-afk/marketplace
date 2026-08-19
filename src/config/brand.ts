@@ -11,7 +11,7 @@ export const brand = {
 
   logo: {
     full: "/brand/aromza-logo.png",
-    light: "/brand/aromza-logo.png",
+    light: "/brand/aromza-logo-light.png",
     dark: "/brand/aromza-logo.png",
     icon: "/brand/aromza-logo.png",
   },

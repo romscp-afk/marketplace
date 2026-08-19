@@ -4,6 +4,8 @@ import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
+  /** White wordmark for dark backgrounds */
+  variant?: "default" | "light";
   height?: number;
   className?: string;
   href?: string;
@@ -11,16 +13,18 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({
+  variant = "default",
   height = 28,
   className,
   href = "/",
   priority = false,
 }: BrandLogoProps) {
   const width = Math.round(height * 3.6);
+  const src = variant === "light" ? brand.logo.light : brand.logo.full;
 
   const logo = (
     <Image
-      src={brand.logo.full}
+      src={src}
       alt={brand.name}
       width={width}
       height={height}
