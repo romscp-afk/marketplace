@@ -86,37 +86,33 @@ CI runs automatically via `.github/workflows/ci.yml` on every push to `main`.
 
 Preview deployments are created automatically for pull requests.
 
-## 5. Supabase (Milestone 3)
+## 5. Supabase (production auth)
+
+The storefront talks to **Supabase Auth + Postgres**. Vercel can create that project for you (billed through Vercel).
+
+### Create the project from Vercel (recommended)
+
+1. Open [Supabase on the Vercel Marketplace](https://vercel.com/marketplace/supabase) while logged into the **roms007** team.
+2. Click **Install** and connect it to the **marketplace** project (`aromza.store`).
+3. Choose **Singapore (`sin1`)** and the **Pro** plan (this is the plan Vercel offers).
+4. Confirm the env vars were added: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or publishable key), and `SUPABASE_SERVICE_ROLE_KEY`.
+5. Redeploy production, then apply schema and create the super-admin:
 
 ```bash
-# Install CLI
-npm install -g supabase
-
-# Login and link
-supabase login
-supabase link --project-ref YOUR_PROJECT_REF
-
-# When migrations are ready:
-npm run db:push
+npx vercel env pull .env.local
+npx supabase db push --db-url "$POSTGRES_URL_NON_POOLING"
+node --env-file=.env.local scripts/ensure-supabase-admin.mjs
+npx vercel --prod
 ```
 
-Add credentials to `.env.local`:
-```
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-```
+Health check should then show `"supabase": "configured"`.
 
-Restart dev server. Health check will show `"supabase": "configured"`.
-
-### Create admin user (development)
-
-While Supabase is not connected, sign in at `/account/login` with the bootstrap super-admin:
+Sign in at `/account/login` with:
 
 - Email: `admin@aromza.store`
-- Password: `AromzaPortal#2026` (override with `BOOTSTRAP_ADMIN_PASSWORD` on Vercel)
+- Password: `AromzaPortal#2026` (override with `BOOTSTRAP_ADMIN_PASSWORD`)
 
-Override email with `BOOTSTRAP_ADMIN_EMAIL`. After registering a normal account in Supabase, promote to admin via SQL editor:
+After registering a normal account in Supabase, promote to admin via SQL editor:
 
 ```sql
 INSERT INTO public.user_roles (user_id, role)

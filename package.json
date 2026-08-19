@@ -23,7 +23,8 @@
     "mobile:android": "npm --prefix mobile run android",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
-    "db:types": "supabase gen types typescript --local > src/types/database.generated.ts"
+    "db:types": "supabase gen types typescript --local > src/types/database.generated.ts",
+    "db:ensure-admin": "node scripts/ensure-supabase-admin.mjs",
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",

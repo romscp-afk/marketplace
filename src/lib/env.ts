@@ -48,16 +48,21 @@ function parseEnv<T extends z.ZodTypeAny>(
   return schema.parse({});
 }
 
-/** Vercel Supabase integration may inject unprefixed SUPABASE_* vars */
+/** Vercel Marketplace / legacy Supabase integrations inject several aliases */
 function resolveSupabaseUrl(): string | undefined {
   return emptyToUndefined(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ??
+      process.env.SUPABASE_URL ??
+      process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL,
   );
 }
 
 function resolveSupabaseAnonKey(): string | undefined {
   return emptyToUndefined(
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+      process.env.SUPABASE_ANON_KEY ??
+      process.env.SUPABASE_PUBLISHABLE_KEY,
   );
 }
 
@@ -73,7 +78,9 @@ export const publicEnv = parseEnv(publicEnvSchema, {
 
 export const serverEnv = parseEnv(serverEnvSchema, {
   NODE_ENV: emptyToUndefined(process.env.NODE_ENV),
-  SUPABASE_SERVICE_ROLE_KEY: emptyToUndefined(process.env.SUPABASE_SERVICE_ROLE_KEY),
+  SUPABASE_SERVICE_ROLE_KEY: emptyToUndefined(
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY,
+  ),
   PAYMENT_PROVIDER: emptyToUndefined(process.env.PAYMENT_PROVIDER),
   PAYMENT_WEBHOOK_SECRET: emptyToUndefined(process.env.PAYMENT_WEBHOOK_SECRET),
   EMAIL_PROVIDER: emptyToUndefined(process.env.EMAIL_PROVIDER),
