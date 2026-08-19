@@ -7,7 +7,7 @@ import type {
   Seller,
 } from "./types";
 
-const DEFAULT_API_URL = "https://marketplace-mocha-three-78.vercel.app";
+const DEFAULT_API_URL = "https://aromza.store";
 
 export function getApiBaseUrl(): string {
   const fromEnv = process.env.EXPO_PUBLIC_APP_URL;

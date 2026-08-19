@@ -29,23 +29,23 @@ export const marketplaceUi = {
   ],
 
   banners: [
-    { id: "1", title: "Mega Sale", subtitle: "Up to 70% off", color: c.primary },
+    { id: "1", title: "Welcome to Aromza", subtitle: "Shop curated finds", color: c.primary },
     {
       id: "2",
       title: "Free Shipping",
       subtitle: `Orders over S$${brand.delivery.freeShippingThreshold}`,
       color: c.success,
     },
-    { id: "3", title: "Mall Brands", subtitle: "100% Authentic", color: c.featured },
+    { id: "3", title: "Trusted Sellers", subtitle: "Quality you can count on", color: c.featured },
   ],
 
   trendingSearches: [
-    "wireless earbuds",
-    "skincare",
-    "home decor",
-    "running shoes",
-    "phone case",
-    "coffee beans",
+    "fashion",
+    "beauty",
+    "home",
+    "electronics",
+    "jewelry",
+    "gourmet",
   ],
 
   colors: {

@@ -25,7 +25,7 @@ import type { HomeResponse, Product } from "@/lib/types";
 import { useWishlist } from "@/contexts/wishlist-context";
 import Colors from "@/constants/Colors";
 
-const aromzaLogo = require("@/assets/images/aromza-logo.png");
+const aromzaLogo = require("@/assets/images/aromza-logo-light.png");
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 10,
   },
-  logo: { width: 96, height: 24 },
+  logo: { width: 110, height: 28 },
   headerIcons: { flexDirection: "row", alignItems: "center" },
   headerIconGap: { marginLeft: 16 },
   discoverHeader: {

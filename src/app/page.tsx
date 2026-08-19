@@ -58,11 +58,17 @@ export default async function HomePage() {
             Daily Discover
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-0 px-1 pb-4">
-          {feedProducts.map((product, i) => (
-            <ProductCard key={product.id} product={product} priority={i < 4} />
-          ))}
-        </div>
+        {feedProducts.length === 0 ? (
+          <p className="text-muted px-6 py-12 text-center text-sm">
+            Products are coming soon. Check back shortly.
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 gap-0 px-1 pb-4">
+            {feedProducts.map((product, i) => (
+              <ProductCard key={product.id} product={product} priority={i < 4} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Desktop — Taobao-style layout */}
@@ -79,11 +85,17 @@ export default async function HomePage() {
               Guess You Like
             </h2>
           </div>
-          <div className="grid grid-cols-3 gap-3 py-4 lg:grid-cols-4 xl:grid-cols-5">
-            {feedProducts.map((product, i) => (
-              <ProductCard key={product.id} product={product} priority={i < 10} />
-            ))}
-          </div>
+          {feedProducts.length === 0 ? (
+            <p className="text-muted py-16 text-center text-sm">
+              Products are coming soon. Sellers are being onboarded to Aromza.
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-3 py-4 lg:grid-cols-4 xl:grid-cols-5">
+              {feedProducts.map((product, i) => (
+                <ProductCard key={product.id} product={product} priority={i < 10} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

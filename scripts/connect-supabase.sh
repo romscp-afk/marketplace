@@ -28,4 +28,4 @@ echo "→ Redeploying production..."
 npx vercel deploy --prod --yes
 
 echo ""
-echo "✓ Supabase connected. Check: https://marketplace-mocha-three-78.vercel.app/api/health"
+echo "✓ Supabase connected. Check: https://aromza.store/api/health"

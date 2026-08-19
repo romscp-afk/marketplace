@@ -19,7 +19,7 @@ Native companion app for the Marketplace web store. Uses the **same REST API** a
    ```
 
    For production (default), the app uses:
-   `https://marketplace-mocha-three-78.vercel.app`
+   `https://aromza.store`
 
 4. **Start Expo**:
    ```bash

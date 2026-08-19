@@ -97,7 +97,7 @@ export const brand = {
   },
 
   announcement: {
-    enabled: true,
+    enabled: false,
     message: "Free delivery on orders over S$70 — shop curated collections today",
     link: "/search?sort=deals",
     linkText: "Shop deals",

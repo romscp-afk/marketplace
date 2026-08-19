@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Store } from "lucide-react";
 import { seedSellers } from "@/data/seed";
 import { productImageUrl } from "@/lib/images";
 import { Rating } from "@/components/ui/rating";
 import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export default function SellersDirectoryPage() {
   return (
@@ -17,6 +18,14 @@ export default function SellersDirectoryPage() {
         </p>
       </header>
 
+      {seedSellers.length === 0 ? (
+        <EmptyState
+          icon={<Store className="h-12 w-12" />}
+          title="Sellers coming soon"
+          description="We're onboarding trusted sellers to Aromza. Check back shortly, or apply to sell on our marketplace."
+          action={{ label: "Sell on Aromza", href: "/sell" }}
+        />
+      ) : (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {seedSellers.map((seller) => (
           <Link
@@ -48,6 +57,7 @@ export default function SellersDirectoryPage() {
           </Link>
         ))}
       </div>
+      )}
     </div>
   );
 }
