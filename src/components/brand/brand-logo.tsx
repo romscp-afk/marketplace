@@ -4,8 +4,8 @@ import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
-  /** White wordmark for dark backgrounds */
-  variant?: "default" | "light";
+  /** White wordmark for dark backgrounds; icon = square app mark */
+  variant?: "default" | "light" | "icon";
   height?: number;
   className?: string;
   href?: string;
@@ -19,8 +19,13 @@ export function BrandLogo({
   href = "/",
   priority = false,
 }: BrandLogoProps) {
-  const width = Math.round(height * 3.6);
-  const src = variant === "light" ? brand.logo.light : brand.logo.full;
+  const isIcon = variant === "icon";
+  const width = isIcon ? height : Math.round(height * 3.6);
+  const src = isIcon
+    ? brand.logo.icon
+    : variant === "light"
+      ? brand.logo.light
+      : brand.logo.full;
 
   const logo = (
     <Image
@@ -28,8 +33,12 @@ export function BrandLogo({
       alt={brand.name}
       width={width}
       height={height}
-      className={cn("object-contain object-left", className)}
-      style={{ height, width: "auto", maxWidth: width }}
+      className={cn(
+        "object-contain",
+        isIcon ? "object-center" : "object-left",
+        className,
+      )}
+      style={{ height, width: isIcon ? height : "auto", maxWidth: width }}
       priority={priority}
       unoptimized
     />

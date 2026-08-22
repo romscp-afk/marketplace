@@ -1,33 +1,15 @@
-import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export async function GET() {
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#064E3B",
-          borderRadius: 32,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-            alignItems: "center",
-          }}
-        >
-          <div style={{ width: 80, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
-          <div style={{ width: 64, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
-          <div style={{ width: 48, height: 8, background: "#F4F7FB", borderRadius: 4 }} />
-        </div>
-      </div>
-    ),
-    { width: 192, height: 192 },
+  const icon = await readFile(
+    join(process.cwd(), "public/icons/icon-192x192.png"),
   );
+
+  return new Response(icon, {
+    headers: {
+      "Content-Type": "image/png",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    },
+  });
 }
