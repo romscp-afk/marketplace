@@ -44,12 +44,12 @@ export function Header() {
             <Menu className="h-5 w-5" />
           </button>
 
-          <BrandLogo height={32} />
+          <BrandLogo height={44} className="shrink-0 self-center" />
 
           {/* Desktop search */}
           <form
             onSubmit={handleSearch}
-            className="mx-4 hidden max-w-xl flex-1 lg:flex"
+            className="mx-4 hidden max-w-xl flex-1 self-center lg:flex"
             role="search"
           >
             <label htmlFor="header-search" className="sr-only">

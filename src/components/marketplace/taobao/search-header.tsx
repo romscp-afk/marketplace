@@ -48,46 +48,36 @@ export function TaobaoSearchHeader() {
   return (
     <header className="bg-surface border-b border-border">
       <div className="mx-auto max-w-[1200px] px-3 pt-3 pb-0">
-        <div className="flex items-center gap-5">
-          <BrandLogo height={36} priority />
+        <div className="grid grid-cols-[200px_minmax(0,1fr)_auto] items-center gap-x-5 gap-y-1.5">
+          <BrandLogo height={68} priority className="col-start-1 row-start-1 shrink-0 self-center" />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <form onSubmit={handleSearch} className="flex" role="search">
-              <label htmlFor="mic-search" className="sr-only">
-                Search products
-              </label>
-              <div className="border-header flex h-10 min-w-0 flex-1 overflow-hidden rounded-sm border-2">
-                <input
-                  id="mic-search"
-                  type="search"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Enter a keyword to search products"
-                  className="min-w-0 flex-1 bg-surface px-4 text-sm focus:outline-none"
-                />
-                <button
-                  type="submit"
-                  className="bg-header hover:bg-primary-dark shrink-0 px-6 text-sm font-semibold text-white transition-colors"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pb-1 text-xs">
-              <span className="text-muted">Hot:</span>
-              {marketplaceUi.trendingSearches.slice(0, 6).map((term) => (
-                <Link
-                  key={term}
-                  href={`/search?q=${encodeURIComponent(term)}`}
-                  className="text-muted hover:text-primary"
-                >
-                  {term}
-                </Link>
-              ))}
+          <form
+            onSubmit={handleSearch}
+            className="col-start-2 row-start-1 flex min-w-0 self-center"
+            role="search"
+          >
+            <label htmlFor="mic-search" className="sr-only">
+              Search products
+            </label>
+            <div className="border-header flex h-11 min-w-0 w-full overflow-hidden rounded-sm border-2">
+              <input
+                id="mic-search"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Enter a keyword to search products"
+                className="min-w-0 flex-1 bg-surface px-4 text-sm focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="bg-header hover:bg-primary-dark shrink-0 px-6 text-sm font-semibold text-white transition-colors"
+              >
+                Search
+              </button>
             </div>
-          </div>
+          </form>
 
-          <div className="flex shrink-0 items-center gap-4">
+          <div className="col-start-3 row-start-1 flex shrink-0 items-center gap-4 self-center">
             <Link
               href="/sell"
               className="hover:text-primary flex flex-col items-center gap-0.5 text-foreground transition-colors"
@@ -108,6 +98,19 @@ export function TaobaoSearchHeader() {
                 </span>
               ) : null}
             </Link>
+          </div>
+
+          <div className="col-start-2 row-start-2 flex flex-wrap items-center gap-x-3 gap-y-1 pb-1 text-xs">
+            <span className="text-muted">Hot:</span>
+            {marketplaceUi.trendingSearches.slice(0, 6).map((term) => (
+              <Link
+                key={term}
+                href={`/search?q=${encodeURIComponent(term)}`}
+                className="text-muted hover:text-primary"
+              >
+                {term}
+              </Link>
+            ))}
           </div>
         </div>
 
