@@ -23,8 +23,8 @@ export function Footer() {
           <FooterColumn title="Legal" links={navigation.footer.legal} />
         </div>
 
-        <div className="border-primary-foreground/20 mt-10 flex flex-col items-center justify-between gap-4 border-t pt-6 sm:flex-row">
-          <p className="text-primary-foreground/60 text-xs">
+        <div className="border-primary-foreground/20 mt-10 border-t pt-6">
+          <p className="text-primary-foreground/60 text-center text-xs sm:text-left">
             &copy; {currentYear}{" "}
             <a
               href={brand.copyright.url}
@@ -35,9 +35,6 @@ export function Footer() {
               {brand.copyright.holder}
             </a>
             . All rights reserved.
-          </p>
-          <p className="text-primary-foreground/60 text-xs">
-            {brand.contact.businessAddress}
           </p>
         </div>
       </div>
