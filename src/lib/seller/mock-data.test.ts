@@ -1,25 +1,7 @@
 import { describe, it, expect } from "vitest";
-import {
-  getMockStats,
-  getMockProducts,
-  getMockOrders,
-  getMockPayouts,
-  getMockApplication,
-} from "@/lib/seller/mock-data";
+import { getMockOrders, getMockPayouts, getMockApplication } from "@/lib/seller/mock-data";
 
 describe("seller mock data", () => {
-  it("returns dashboard stats", () => {
-    const stats = getMockStats();
-    expect(stats.activeProducts).toBeGreaterThan(0);
-    expect(stats.rating).toBeGreaterThan(0);
-  });
-
-  it("returns seller products", () => {
-    const products = getMockProducts();
-    expect(products.length).toBeGreaterThanOrEqual(3);
-    expect(products[0]?.title).toBeTruthy();
-  });
-
   it("returns orders with commission", () => {
     const orders = getMockOrders();
     expect(orders.length).toBeGreaterThan(0);

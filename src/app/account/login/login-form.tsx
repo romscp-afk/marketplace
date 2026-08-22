@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button";
 
 const initialState: AuthActionResult | null = null;
 
-export function LoginForm() {
+export function LoginForm({ redirectTo }: { redirectTo?: string }) {
   const [state, formAction, isPending] = useActionState(signIn, initialState);
 
   return (
     <>
       <form action={formAction} className="mt-8 space-y-4">
+        {redirectTo ? <input type="hidden" name="redirect" value={redirectTo} /> : null}
         <Input
           label="Email address"
           name="email"
@@ -42,8 +43,13 @@ export function LoginForm() {
 
       <div className="mt-6 space-y-2 text-center text-sm">
         <p>
+          <Link href="/seller/register" className="text-primary font-medium hover:underline">
+            Create a supplier account
+          </Link>
+        </p>
+        <p>
           <Link href="/account/register" className="text-primary font-medium hover:underline">
-            Create an account
+            Create a customer account
           </Link>
         </p>
         <p>

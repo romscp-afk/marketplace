@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import type { Product } from "@/lib/types";
 import { formatCurrency } from "@/lib/format";
 import { discountPercent, formatSoldCount } from "@/lib/marketplace-ui";
+import { productImageUrl } from "@/lib/images";
 import Colors from "@/constants/Colors";
 
 interface ProductCardProps {
@@ -14,7 +15,7 @@ interface ProductCardProps {
 
 function productImage(product: Product): string {
   if (product.images[0]) return product.images[0];
-  return `https://picsum.photos/seed/${encodeURIComponent(product.slug)}/400/400`;
+  return productImageUrl(product.slug, 400, 400, product.categorySlug);
 }
 
 export function ProductCard({

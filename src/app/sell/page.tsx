@@ -5,33 +5,34 @@ export default function SellPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="font-display text-3xl font-semibold">
-        Sell on {brand.name}
+        Supply on {brand.name}
       </h1>
       <p className="text-muted mt-4 text-lg">
-        Join our community of independent sellers and reach customers nationwide.
+        Give your catalogue a storefront. Suppliers publish products, manage stock, and sell to
+        customers in Singapore.
       </p>
 
       <div className="mt-8 space-y-6">
         {[
           {
             step: "1",
-            title: "Apply to sell",
-            desc: "Submit your business details, store information, and required documents.",
+            title: "Create a supplier account",
+            desc: "Register your store name and sign in to the supplier dashboard.",
           },
           {
             step: "2",
-            title: "Get approved",
-            desc: "Our team reviews your application and verifies your business.",
+            title: "Add products",
+            desc: "Enter title, price, stock, category, and an image URL.",
           },
           {
             step: "3",
-            title: "List products",
-            desc: "Create your store, upload products, and set your prices.",
+            title: "Publish",
+            desc: "Set status to Active and the product appears on Aromza immediately.",
           },
           {
             step: "4",
-            title: "Start selling",
-            desc: "Receive orders, fulfil shipments, and get paid on schedule.",
+            title: "Fulfil orders",
+            desc: "Track sales and ship from the same dashboard.",
           },
         ].map(({ step, title, desc }) => (
           <div key={step} className="flex gap-4">
@@ -46,16 +47,20 @@ export default function SellPage() {
         ))}
       </div>
 
-      <Link
-        href="/seller/apply"
-        className="bg-primary text-primary-foreground hover:bg-primary-dark mt-10 inline-flex h-12 items-center justify-center rounded-lg px-6 text-base font-medium"
-      >
-        Start your application
-      </Link>
-
-      <p className="text-muted mt-4 text-xs">
-        Already approved? <Link href="/seller/dashboard" className="text-primary hover:underline">Go to dashboard</Link>
-      </p>
+      <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+        <Link
+          href="/seller/register"
+          className="bg-primary text-primary-foreground hover:bg-primary-dark inline-flex h-12 items-center justify-center rounded-lg px-6 text-base font-medium"
+        >
+          Create supplier account
+        </Link>
+        <Link
+          href="/account/login?redirect=/seller/dashboard"
+          className="border-border hover:bg-background inline-flex h-12 items-center justify-center rounded-lg border px-6 text-base font-medium"
+        >
+          Sign in
+        </Link>
+      </div>
     </div>
   );
 }

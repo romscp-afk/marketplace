@@ -25,13 +25,13 @@ export function SellerSidebar({ items = sellerNavigation.main, storeName }: Sell
           <ArrowLeft className="h-3 w-3" />
           Back to {brand.name}
         </Link>
-        <p className="text-muted text-xs font-medium tracking-wide uppercase">Seller portal</p>
+        <p className="text-muted text-xs font-medium tracking-wide uppercase">Supplier dashboard</p>
         {storeName ? (
           <p className="mt-1 truncate text-sm font-semibold">{storeName}</p>
         ) : null}
       </div>
 
-      <nav aria-label="Seller navigation" className="space-y-0.5">
+      <nav aria-label="Supplier navigation" className="space-y-0.5">
         {items.map(({ label, href, icon: Icon }) => {
           const isActive = pathname === href || pathname.startsWith(`${href}/`);
           return (

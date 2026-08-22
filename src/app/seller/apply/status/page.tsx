@@ -47,7 +47,7 @@ export default async function ApplicationStatusPage() {
                   {application.status === "submitted" && "Your application is in the queue for review."}
                   {application.status === "under_review" && "Our team is reviewing your application."}
                   {application.status === "more_info_required" && "We need additional information. Check your email."}
-                  {application.status === "approved" && "Congratulations! Your seller account is active."}
+                  {application.status === "approved" && "Your supplier account is active. You can publish products now."}
                   {application.status === "rejected" && "Unfortunately your application was not approved."}
                   {application.status === "draft" && "Complete and submit your application."}
                 </p>
@@ -82,7 +82,7 @@ export default async function ApplicationStatusPage() {
                   href="/seller/dashboard"
                   className="bg-primary text-primary-foreground hover:bg-primary-dark inline-flex h-11 w-full items-center justify-center rounded-lg text-sm font-medium"
                 >
-                  Go to seller dashboard
+                  Go to supplier dashboard
                 </Link>
               ) : application.status === "rejected" || application.status === "more_info_required" ? (
                 <Link

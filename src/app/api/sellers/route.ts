@@ -1,4 +1,6 @@
-import { seedSellers } from "@/data/seed";
+import {
+  getStorefrontSellers,
+} from "@/lib/data/sellers";
 import {
   mobileJsonResponse,
   mobileOptionsResponse,
@@ -9,5 +11,5 @@ export async function OPTIONS() {
 }
 
 export async function GET() {
-  return mobileJsonResponse({ data: seedSellers });
+  return mobileJsonResponse({ data: await getStorefrontSellers() });
 }

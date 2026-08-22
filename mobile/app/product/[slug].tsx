@@ -19,10 +19,14 @@ import { discountPercent, formatSoldCount } from "@/lib/marketplace-ui";
 import { useCart } from "@/contexts/cart-context";
 import { useWishlist } from "@/contexts/wishlist-context";
 import type { Product } from "@/lib/types";
+import { productImageUrl } from "@/lib/images";
 import Colors from "@/constants/Colors";
 
 function productImage(product: Product): string {
-  return product.images[0] ?? `https://picsum.photos/seed/${encodeURIComponent(product.slug)}/600/600`;
+  return (
+    product.images[0] ??
+    productImageUrl(product.slug, 600, 600, product.categorySlug)
+  );
 }
 
 export default function ProductScreen() {

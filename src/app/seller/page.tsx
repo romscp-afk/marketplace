@@ -4,17 +4,16 @@ import { brand } from "@/config/brand";
 export default function SellerRootPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-      <h1 className="font-display text-3xl font-semibold">Seller portal</h1>
+      <h1 className="font-display text-3xl font-semibold">Supplier dashboard</h1>
       <p className="text-muted mt-3 text-sm">
-        Manage your store, products, and orders on {brand.name}. Seller operations are available
-        to approved accounts after sign-in.
+        Publish products, manage your store, and fulfil orders on {brand.name}.
       </p>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Link
-          href="/seller/apply"
+          href="/seller/register"
           className="bg-primary text-primary-foreground hover:bg-primary-dark inline-flex h-11 items-center justify-center rounded-lg px-5 text-sm font-medium"
         >
-          Apply to sell
+          Create supplier account
         </Link>
         <Link
           href="/account/login?redirect=/seller/dashboard"
@@ -23,6 +22,13 @@ export default function SellerRootPage() {
           Sign in to dashboard
         </Link>
       </div>
+      <p className="text-muted mt-6 text-xs">
+        Need a full business review later? You can still{" "}
+        <Link href="/seller/apply" className="text-primary hover:underline">
+          submit a supplier application
+        </Link>
+        .
+      </p>
     </div>
   );
 }

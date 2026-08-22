@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useMemo, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SlidersHorizontal } from "lucide-react";
@@ -9,17 +9,27 @@ import { MobileMallView } from "@/components/marketplace/mobile-mall-view";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProductGridSkeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { searchProducts, getDeals, seedSellers } from "@/data/seed";
 import { navigation } from "@/config/navigation";
 import { brand } from "@/config/brand";
 import { useWishlist } from "@/contexts/wishlist-context";
 import { useRecentSearches } from "@/contexts/cart-context";
 import { analytics } from "@/lib/analytics";
+import type { PaginatedResult, Product, Seller } from "@/types";
+
+const emptyResults: PaginatedResult<Product> = {
+  data: [],
+  total: 0,
+  page: 1,
+  limit: 12,
+  totalPages: 1,
+};
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { addRecent } = useRecentSearches();
+  const [results, setResults] = useState<PaginatedResult<Product>>(emptyResults);
+  const [sellers, setSellers] = useState<Seller[]>([]);
 
   const query = searchParams.get("q") ?? "";
   const category = searchParams.get("category") ?? undefined;
@@ -37,23 +47,31 @@ function SearchContent() {
   const inStock = searchParams.get("inStock") === "true";
   const page = Number(searchParams.get("page") ?? "1");
 
-  const results = useMemo(() => {
-    if (sort === "deals" && !query) {
-      const deals = getDeals();
-      return { data: deals, total: deals.length, page: 1, limit: 12, totalPages: 1 };
-    }
-    return searchProducts(query, {
-      category,
-      seller,
-      minPrice,
-      maxPrice,
-      minRating,
-      inStock: inStock || undefined,
-      sort,
-      page,
-      limit: 12,
-    });
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (query) params.set("q", query);
+    if (category) params.set("category", category);
+    if (seller) params.set("seller", seller);
+    if (sort) params.set("sort", sort);
+    if (minPrice) params.set("minPrice", String(minPrice));
+    if (maxPrice) params.set("maxPrice", String(maxPrice));
+    if (minRating) params.set("minRating", String(minRating));
+    if (inStock) params.set("inStock", "true");
+    params.set("page", String(page));
+    params.set("limit", "12");
+
+    fetch(`/api/products?${params.toString()}`)
+      .then((response) => response.json())
+      .then((payload: PaginatedResult<Product>) => setResults(payload))
+      .catch(() => setResults(emptyResults));
   }, [query, category, seller, sort, minPrice, maxPrice, minRating, inStock, page]);
+
+  useEffect(() => {
+    fetch("/api/sellers")
+      .then((response) => response.json())
+      .then((payload: { data?: Seller[] }) => setSellers(payload.data ?? []))
+      .catch(() => setSellers([]));
+  }, []);
 
   useEffect(() => {
     if (query) {
@@ -67,7 +85,7 @@ function SearchContent() {
     category && { key: "category", label: `Category: ${category}` },
     seller && {
       key: "seller",
-      label: `Seller: ${seedSellers.find((s) => s.slug === seller)?.storeName ?? seller}`,
+      label: `Seller: ${sellers.find((s) => s.slug === seller)?.storeName ?? seller}`,
     },
     minPrice && { key: "minPrice", label: `Min: S$${minPrice}` },
     maxPrice && { key: "maxPrice", label: `Max: S$${maxPrice}` },
@@ -108,7 +126,7 @@ function SearchContent() {
       <div className="flex gap-8">
         {/* Desktop filters sidebar */}
         <aside className="hidden w-56 shrink-0 md:block" aria-label="Filters">
-          <FilterPanel searchParams={searchParams} />
+          <FilterPanel searchParams={searchParams} sellers={sellers} />
         </aside>
 
         <div className="flex-1">
@@ -199,7 +217,13 @@ function SearchContent() {
   );
 }
 
-function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
+function FilterPanel({
+  searchParams,
+  sellers,
+}: {
+  searchParams: URLSearchParams;
+  sellers: Seller[];
+}) {
   const params = new URLSearchParams(searchParams.toString());
 
   const applyParams = () => {
@@ -249,7 +273,7 @@ function FilterPanel({ searchParams }: { searchParams: URLSearchParams }) {
           }}
         >
           <option value="">All sellers</option>
-          {seedSellers.map((s) => (
+          {sellers.map((s) => (
             <option key={s.id} value={s.slug}>
               {s.storeName}
             </option>

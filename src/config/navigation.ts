@@ -52,6 +52,15 @@ export const navigation = {
         { id: "gifts", name: "Gift Sets", slug: "gift-sets" },
       ],
     },
+    {
+      id: "jewelry",
+      name: "Jewelry",
+      slug: "jewelry",
+      children: [
+        { id: "fine", name: "Fine jewelry", slug: "fine-jewelry" },
+        { id: "fashion-jewelry", name: "Fashion jewelry", slug: "fashion-jewelry" },
+      ],
+    },
   ],
 
   footer: {
@@ -69,7 +78,7 @@ export const navigation = {
     ],
     sellers: [
       { label: "Sell on " + brand.name, href: "/sell" },
-      { label: "Seller Portal", href: "/seller" },
+      { label: "Supplier dashboard", href: "/seller" },
       { label: "Seller Guidelines", href: "/sell/guidelines" },
       { label: "Seller Support", href: "/sell/support" },
     ],

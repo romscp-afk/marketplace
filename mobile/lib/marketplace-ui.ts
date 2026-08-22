@@ -23,14 +23,30 @@ export const marketplaceUi = {
   ],
 
   banners: [
-    { id: "1", title: "Welcome to Aromza", subtitle: "Shop curated finds", color: c.primary },
+    {
+      id: "1",
+      title: "Discover More, From A to Z",
+      subtitle: "Curated finds from trusted sellers",
+      color: c.primary,
+      image:
+        "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&h=600&q=80",
+    },
     {
       id: "2",
-      title: "Free Shipping",
+      title: "Free Shipping Season",
       subtitle: `Orders over S$${brand.delivery.freeShippingThreshold}`,
       color: c.success,
+      image:
+        "https://images.unsplash.com/photo-1472851293808-aa7ad37808e7?auto=format&fit=crop&w=1200&h=600&q=80",
     },
-    { id: "3", title: "Trusted Sellers", subtitle: "Quality you can count on", color: c.featured },
+    {
+      id: "3",
+      title: "Beauty & Wellness",
+      subtitle: "Skincare, makeup & self-care essentials",
+      color: c.featured,
+      image:
+        "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&h=600&q=80",
+    },
   ],
 
   trendingSearches: [

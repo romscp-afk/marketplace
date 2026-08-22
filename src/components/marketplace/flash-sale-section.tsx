@@ -26,7 +26,7 @@ export function FlashSaleSection({ products }: { products: Product[] }) {
   if (!products.length) return null;
 
   return (
-    <section className="bg-surface mt-2" aria-label="Flash sale">
+    <section className="bg-surface mt-0 overflow-hidden rounded-sm border border-border" aria-label="Flash sale">
       <div className="bg-header flex items-center gap-2.5 px-3 py-2.5">
         <Zap className="h-4 w-4 text-white" aria-hidden="true" />
         <span className="text-base font-extrabold text-white italic">Flash Sale</span>

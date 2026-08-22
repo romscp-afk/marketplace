@@ -1,33 +1,34 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Store } from "lucide-react";
-import { seedSellers } from "@/data/seed";
-import { productImageUrl } from "@/lib/images";
+import { getStorefrontSellers } from "@/lib/data/sellers";
+import { sellerLogoUrl } from "@/lib/images";
 import { Rating } from "@/components/ui/rating";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 
-export default function SellersDirectoryPage() {
+export default async function SellersDirectoryPage() {
+  const sellers = await getStorefrontSellers();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
       <header className="mb-8">
-        <h1 className="font-display text-3xl font-semibold">Featured sellers</h1>
+        <h1 className="font-display text-3xl font-semibold">Suppliers</h1>
         <p className="text-muted mt-2 max-w-2xl text-sm">
-          Discover independent sellers curated for quality, reliability, and customer satisfaction.
-          All sellers deliver within Singapore.
+          Shop independent suppliers on Aromza. All stores deliver within Singapore.
         </p>
       </header>
 
-      {seedSellers.length === 0 ? (
+      {sellers.length === 0 ? (
         <EmptyState
           icon={<Store className="h-12 w-12" />}
-          title="Sellers coming soon"
-          description="We're onboarding trusted sellers to Aromza. Check back shortly, or apply to sell on our marketplace."
-          action={{ label: "Sell on Aromza", href: "/sell" }}
+          title="Suppliers coming soon"
+          description="Create a supplier account to publish products on Aromza."
+          action={{ label: "Become a supplier", href: "/sell" }}
         />
       ) : (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {seedSellers.map((seller) => (
+        {sellers.map((seller) => (
           <Link
             key={seller.id}
             href={`/sellers/${seller.slug}`}
@@ -35,7 +36,7 @@ export default function SellersDirectoryPage() {
           >
             <div className="flex items-center gap-4">
               <Image
-                src={productImageUrl(`seller-${seller.slug}`, 112, 112)}
+                src={seller.logoUrl ?? sellerLogoUrl(seller.slug, 112, 112)}
                 alt=""
                 width={56}
                 height={56}

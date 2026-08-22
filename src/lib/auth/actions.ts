@@ -44,18 +44,22 @@ export async function signIn(
   }
 
   if (!isSupabaseConfigured()) {
-    const {
-      isBootstrapAdminCredentials,
-      setBootstrapSession,
-    } = await import("@/lib/auth/bootstrap");
+    const { authenticateBootstrapUser, setBootstrapSession } = await import("@/lib/auth/bootstrap");
+    const { isAdmin, isSeller } = await import("@/lib/auth/session");
 
-    if (!isBootstrapAdminCredentials(parsed.data.email, parsed.data.password)) {
+    const user = authenticateBootstrapUser(parsed.data.email, parsed.data.password);
+    if (!user) {
       return { success: false, error: "Invalid email or password" };
     }
 
-    await setBootstrapSession(parsed.data.email);
+    await setBootstrapSession(user.email);
     revalidatePath("/", "layout");
-    redirect("/admin/dashboard");
+
+    const redirectTo = safeInternalPath(formData.get("redirect"));
+    if (redirectTo) redirect(redirectTo);
+    if (isAdmin(user)) redirect("/admin/dashboard");
+    if (isSeller(user)) redirect("/seller/dashboard");
+    redirect("/account");
   }
 
   const supabase = await createClient();
@@ -66,6 +70,14 @@ export async function signIn(
   }
 
   revalidatePath("/", "layout");
+
+  const redirectTo = safeInternalPath(formData.get("redirect"));
+  if (redirectTo) redirect(redirectTo);
+
+  const { getUser, isAdmin, isSeller } = await import("@/lib/auth/session");
+  const user = await getUser();
+  if (user && isAdmin(user)) redirect("/admin/dashboard");
+  if (user && isSeller(user)) redirect("/seller/dashboard");
   redirect("/account");
 }
 
@@ -73,8 +85,6 @@ export async function signUp(
   _prev: AuthActionResult | null,
   formData: FormData,
 ): Promise<AuthActionResult> {
-  if (!isSupabaseConfigured()) return supabaseNotConfigured();
-
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -86,6 +96,29 @@ export async function signUp(
     return { success: false, error: parsed.error.errors[0]?.message ?? "Invalid input" };
   }
 
+  const asSupplier = formData.get("asSupplier") === "true";
+  const storeName = String(formData.get("storeName") ?? "").trim();
+
+  if (!isSupabaseConfigured()) {
+    if (!asSupplier) {
+      return {
+        success: false,
+        error: "Customer accounts need Supabase. Create a supplier account to publish products.",
+      };
+    }
+
+    const { registerBootstrapSupplier, setBootstrapSession } = await import("@/lib/auth/bootstrap");
+    const { getOrCreateWorkspace } = await import("@/lib/seller/workspace");
+
+    const created = registerBootstrapSupplier(parsed.data);
+    if ("error" in created) return { success: false, error: created.error };
+
+    getOrCreateWorkspace(created, storeName || `${parsed.data.firstName} Store`);
+    await setBootstrapSession(created.email);
+    revalidatePath("/", "layout");
+    redirect("/seller/dashboard");
+  }
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -94,6 +127,7 @@ export async function signUp(
       data: {
         first_name: parsed.data.firstName,
         last_name: parsed.data.lastName,
+        ...(asSupplier ? { intended_role: "seller_owner" } : {}),
       },
       emailRedirectTo: `${publicEnv.NEXT_PUBLIC_APP_URL}/auth/callback`,
     },
@@ -104,7 +138,14 @@ export async function signUp(
   }
 
   revalidatePath("/", "layout");
-  redirect("/account?registered=true");
+  redirect(asSupplier ? "/seller/apply" : "/account?registered=true");
+}
+
+function safeInternalPath(value: FormDataEntryValue | null): string | null {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) {
+    return null;
+  }
+  return value;
 }
 
 export async function signOut(): Promise<void> {
@@ -143,3 +184,4 @@ export async function resetPassword(
 
   return { success: true };
 }
+

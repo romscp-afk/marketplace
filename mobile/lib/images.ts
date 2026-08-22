@@ -1,15 +1,5 @@
-/** Stable image URLs — curated product photography, no random placeholders */
+/** Mirrors src/lib/images.ts — keep product photo mappings in sync */
 
-const categoryImagePaths: Record<string, string> = {
-  fashion: "/images/categories/fashion.jpg",
-  "home-living": "/images/categories/home-living.jpg",
-  beauty: "/images/categories/beauty.jpg",
-  electronics: "/images/categories/electronics.jpg",
-  "food-gourmet": "/images/categories/food-gourmet.jpg",
-  jewelry: "/images/categories/jewelry.jpg",
-};
-
-/** Unsplash photo IDs — product / catalog shots only */
 const productPhotos: Record<string, string> = {
   "organic-cotton-linen-blend-shirt": "photo-1596755094514-f87e34085b2c",
   "handwoven-merino-wool-scarf": "photo-1601925260368-ae853277eb99",
@@ -54,14 +44,6 @@ const categoryProductPhotos: Record<string, string> = {
   jewelry: "photo-1515566444733-99e27e0a4b4b",
 };
 
-const sellerLogos: Record<string, string> = {
-  "artisan-collective": "photo-1535632066927-ab7c75443df4",
-  "modern-living-co": "photo-1615529328331-f9917597363d",
-  "pure-botanicals": "photo-1556228720-195a672e8a03",
-  "tech-haven": "photo-1505740420928-5e560c06d30e",
-  "gourmet-pantry": "photo-1559056199-641a0ae5790b",
-};
-
 function unsplashUrl(photoId: string, width: number, height: number): string {
   return `https://images.unsplash.com/${photoId}?auto=format&fit=crop&w=${width}&h=${height}&q=80`;
 }
@@ -78,15 +60,3 @@ export function productImageUrl(
     categoryProductPhotos.fashion;
   return unsplashUrl(photoId!, width, height);
 }
-
-export function sellerLogoUrl(slug: string, width = 100, height = 100): string {
-  const normalized = slug.replace(/^seller-/, "");
-  const photoId = sellerLogos[normalized] ?? categoryProductPhotos.fashion;
-  return unsplashUrl(photoId, width, height);
-}
-
-export function categoryImageUrl(slug: string): string {
-  return categoryImagePaths[slug] ?? `/images/categories/${slug}.jpg`;
-}
-
-export const PRODUCT_IMAGE_FALLBACK = "/images/placeholder-product.svg";

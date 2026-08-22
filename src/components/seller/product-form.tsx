@@ -103,16 +103,24 @@ export function ProductForm({ categories, product }: ProductFormProps) {
           required
         />
         <Select
-          label="Status"
-          name="status"
-          options={statusOptions}
-          defaultValue={product?.status ?? "draft"}
+        label="Status"
+        name="status"
+        options={statusOptions}
+          defaultValue={product?.status ?? "active"}
           required
         />
       </div>
+      <Input
+        label="Product image URL"
+        name="imageUrl"
+        type="url"
+        defaultValue={product?.imageUrl}
+        placeholder="https://"
+        hint="Paste a direct HTTPS image link. Active products appear on Aromza immediately."
+      />
 
       <p className="text-muted text-xs">
-        Image upload will be available once Supabase Storage is configured.
+        Set status to Active to publish this product to the storefront.
       </p>
 
       {state && !state.success ? (

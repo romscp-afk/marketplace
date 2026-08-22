@@ -1,9 +1,11 @@
 import { isSupabaseConfigured } from "@/lib/env";
+import {
+  BOOTSTRAP_ADMIN_EMAIL,
+  BOOTSTRAP_SUPPLIER_EMAIL,
+} from "@/lib/auth/bootstrap-credentials";
 
 export function LoginNotice() {
   if (isSupabaseConfigured()) return null;
-
-  const email = process.env.BOOTSTRAP_ADMIN_EMAIL?.trim() || "admin@aromza.store";
 
   return (
     <div
@@ -11,9 +13,14 @@ export function LoginNotice() {
       role="status"
     >
       <p className="font-medium">Portal access (Supabase not connected)</p>
+      <p className="text-muted mt-2">
+        Admin: <span className="text-foreground font-medium">{BOOTSTRAP_ADMIN_EMAIL}</span>
+      </p>
       <p className="text-muted mt-1">
-        Sign in with <span className="text-foreground font-medium">{email}</span> and your
-        bootstrap admin password to open the admin portal.
+        Supplier: <span className="text-foreground font-medium">{BOOTSTRAP_SUPPLIER_EMAIL}</span>
+      </p>
+      <p className="text-muted mt-2 text-xs">
+        Use the launch passwords, or create a new supplier account from Sell on Aromza.
       </p>
     </div>
   );

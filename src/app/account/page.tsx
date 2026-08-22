@@ -96,7 +96,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
                         href="/seller/dashboard"
                         className="border-border hover:bg-background inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium"
                       >
-                        Seller portal
+                        Supplier dashboard
                       </Link>
                     ) : null}
                   </div>

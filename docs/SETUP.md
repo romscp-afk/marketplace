@@ -109,8 +109,10 @@ Health check should then show `"supabase": "configured"`.
 
 Sign in at `/account/login` with:
 
-- Email: `admin@aromza.store`
-- Password: `AromzaPortal#2026` (override with `BOOTSTRAP_ADMIN_PASSWORD`)
+- Admin: `admin@aromza.store` / `AromzaPortal#2026`
+- Supplier: `supplier@aromza.store` / `AromzaSupplier#2026`
+
+Or create a supplier account at `/seller/register`, then publish products from `/seller/dashboard`.
 
 After registering a normal account in Supabase, promote to admin via SQL editor:
 

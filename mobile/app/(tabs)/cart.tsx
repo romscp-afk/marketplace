@@ -7,10 +7,11 @@ import { useCart } from "@/contexts/cart-context";
 import { formatCurrency } from "@/lib/format";
 import { brand } from "@/lib/brand";
 import type { CartItem } from "@/lib/types";
+import { productImageUrl } from "@/lib/images";
 import Colors from "@/constants/Colors";
 
-function productImage(slug: string, images: string[]) {
-  return images[0] ?? `https://picsum.photos/seed/${encodeURIComponent(slug)}/200/200`;
+function productImage(slug: string, images: string[], categorySlug?: string) {
+  return images[0] ?? productImageUrl(slug, 200, 200, categorySlug);
 }
 
 export default function CartScreen() {
@@ -78,7 +79,13 @@ export default function CartScreen() {
                     <Ionicons name="checkbox" size={20} color={Colors.light.tint} />
                   </View>
                   <Image
-                    source={{ uri: productImage(item.product.slug, item.product.images) }}
+                    source={{
+                      uri: productImage(
+                        item.product.slug,
+                        item.product.images,
+                        item.product.categorySlug,
+                      ),
+                    }}
                     style={styles.thumb}
                   />
                   <View style={styles.itemBody}>

@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSellerBySlug, getProductsBySeller } from "@/data/seed";
+import {
+  getStorefrontProductsBySeller,
+  getStorefrontSellerBySlug,
+} from "@/lib/data/sellers";
 import { ProductCard } from "@/components/product/product-card";
 import { Rating } from "@/components/ui/rating";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
-import { productImageUrl } from "@/lib/images";
+import { sellerLogoUrl } from "@/lib/images";
 import Image from "next/image";
 
 interface SellerPageProps {
@@ -15,8 +18,8 @@ interface SellerPageProps {
 
 export async function generateMetadata({ params }: SellerPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const seller = getSellerBySlug(slug);
-  if (!seller) return { title: "Seller not found" };
+  const seller = await getStorefrontSellerBySlug(slug);
+  if (!seller) return { title: "Supplier not found" };
   return {
     title: seller.storeName,
     description: seller.description,
@@ -25,10 +28,10 @@ export async function generateMetadata({ params }: SellerPageProps): Promise<Met
 
 export default async function SellerStorePage({ params }: SellerPageProps) {
   const { slug } = await params;
-  const seller = getSellerBySlug(slug);
+  const seller = await getStorefrontSellerBySlug(slug);
   if (!seller) notFound();
 
-  const products = getProductsBySeller(slug);
+  const products = await getStorefrontProductsBySeller(slug);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12">
@@ -42,7 +45,7 @@ export default async function SellerStorePage({ params }: SellerPageProps) {
 
       <header className="bg-surface mb-10 flex flex-col gap-4 rounded-xl border border-border p-6 sm:flex-row sm:items-center">
         <Image
-          src={productImageUrl(`seller-${seller.slug}`, 120, 120)}
+          src={seller.logoUrl ?? sellerLogoUrl(seller.slug, 120, 120)}
           alt=""
           width={72}
           height={72}

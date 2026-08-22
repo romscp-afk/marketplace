@@ -50,7 +50,9 @@ export async function getProducts(
   filters: SearchFilters = {},
 ): Promise<PaginatedResult<Product>> {
   if (!isSupabaseConfigured()) {
-    const result = seed.searchProducts(filters.query ?? "", filters);
+    const { getPublishedProducts } = await import("@/lib/seller/workspace");
+    const catalog = [...seed.seedProducts, ...getPublishedProducts()];
+    const result = seed.searchProducts(filters.query ?? "", filters, catalog);
     return {
       data: result.data,
       total: result.total,
@@ -140,7 +142,11 @@ export async function getProducts(
 
 export async function getProductBySlug(slug: string): Promise<Product | undefined> {
   if (!isSupabaseConfigured()) {
-    return seed.getProductBySlug(slug);
+    const { getPublishedProducts } = await import("@/lib/seller/workspace");
+    return (
+      seed.getProductBySlug(slug) ??
+      getPublishedProducts().find((product) => product.slug === slug)
+    );
   }
 
   const supabase = await createClient();
@@ -186,37 +192,35 @@ export async function getProductBySlug(slug: string): Promise<Product | undefine
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getFeaturedProducts();
+  if (!isSupabaseConfigured()) {
+    const { data } = await getProducts({ sort: "newest", limit: 8 });
+    return data;
+  }
   const { data } = await getProducts({ sort: "rating", limit: 8 });
   return data;
 }
 
 export async function getTrendingProducts(exclude: string[] = []): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getTrendingProducts(exclude);
   const { data } = await getProducts({ sort: "popularity", limit: 8 + exclude.length });
   return data.filter((p) => !exclude.includes(p.id)).slice(0, 8);
 }
 
 export async function getNewArrivals(exclude: string[] = []): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getNewArrivals(exclude);
   const { data } = await getProducts({ sort: "newest", limit: 8 + exclude.length });
   return data.filter((p) => !exclude.includes(p.id)).slice(0, 8);
 }
 
 export async function getDeals(exclude: string[] = []): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getDeals(exclude);
   const { data } = await getProducts({ sort: "deals", limit: 16 });
   return data.filter((p) => !exclude.includes(p.id) && p.compareAtPrice && p.compareAtPrice > p.price).slice(0, 8);
 }
 
 export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getRelatedProducts(product, limit);
-  const { data } = await getProducts({ category: product.categorySlug, limit });
+  const { data } = await getProducts({ category: product.categorySlug, limit: limit + 1 });
   return data.filter((p) => p.id !== product.id).slice(0, limit);
 }
 
 export async function getProductsByCategory(categorySlug: string): Promise<Product[]> {
-  if (!isSupabaseConfigured()) return seed.getProductsByCategory(categorySlug);
   const { data } = await getProducts({ category: categorySlug, limit: 48 });
   return data;
 }

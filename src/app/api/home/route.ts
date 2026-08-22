@@ -5,7 +5,7 @@ import {
   getDeals,
 } from "@/lib/data/products";
 import { getCategories } from "@/lib/data/categories";
-import { seedSellers } from "@/data/seed";
+import { getStorefrontSellers } from "@/lib/data/sellers";
 import { brand } from "@/config/brand";
 import { marketplaceUi } from "@/config/marketplace-ui";
 import {
@@ -44,6 +44,6 @@ export async function GET() {
       deals,
     },
     categories,
-    sellers: seedSellers.slice(0, 3),
+    sellers: (await getStorefrontSellers()).slice(0, 3),
   });
 }

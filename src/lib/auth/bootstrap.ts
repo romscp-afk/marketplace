@@ -1,18 +1,17 @@
 import { cookies } from "next/headers";
-import {
-  BOOTSTRAP_ADMIN_EMAIL,
-  getBootstrapAdminUser,
-  isBootstrapAdminCredentials,
-  signBootstrapPayload,
-  verifyBootstrapToken,
-} from "@/lib/auth/bootstrap-credentials";
+import { signBootstrapPayload, verifyBootstrapToken } from "@/lib/auth/bootstrap-credentials";
 import type { AuthUser } from "@/lib/auth/session";
 
 export {
   BOOTSTRAP_ADMIN_EMAIL,
   BOOTSTRAP_ADMIN_PASSWORD,
+  BOOTSTRAP_SUPPLIER_EMAIL,
+  BOOTSTRAP_SUPPLIER_PASSWORD,
+  authenticateBootstrapUser,
   getBootstrapAdminUser,
   isBootstrapAdminCredentials,
+  isBootstrapSupplierCredentials,
+  registerBootstrapSupplier,
 } from "@/lib/auth/bootstrap-credentials";
 
 const COOKIE_NAME = "aromza_portal_session";

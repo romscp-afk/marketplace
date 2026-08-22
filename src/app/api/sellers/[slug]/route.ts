@@ -1,4 +1,7 @@
-import { getSellerBySlug, getProductsBySeller } from "@/data/seed";
+import {
+  getStorefrontProductsBySeller,
+  getStorefrontSellerBySlug,
+} from "@/lib/data/sellers";
 import {
   mobileErrorResponse,
   mobileJsonResponse,
@@ -14,12 +17,12 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
-  const seller = getSellerBySlug(slug);
+  const seller = await getStorefrontSellerBySlug(slug);
 
   if (!seller) {
     return mobileErrorResponse("Seller not found", 404);
   }
 
-  const products = getProductsBySeller(slug);
+  const products = await getStorefrontProductsBySeller(slug);
   return mobileJsonResponse({ seller, products });
 }

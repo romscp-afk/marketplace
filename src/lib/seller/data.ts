@@ -37,7 +37,19 @@ function mapProduct(row: Record<string, unknown>): SellerProduct {
 }
 
 export async function getSellerStats(sellerId: string): Promise<SellerStats> {
-  if (!isSupabaseConfigured()) return mock.getMockStats();
+  if (!isSupabaseConfigured()) {
+    const { getWorkspaceBySellerId } = await import("@/lib/seller/workspace");
+    const workspace = getWorkspaceBySellerId(sellerId);
+    const products = workspace?.products ?? [];
+    return {
+      totalSales: 0,
+      ordersThisMonth: 0,
+      activeProducts: products.filter((product) => product.status === "active").length,
+      lowStockCount: products.filter((product) => product.stock > 0 && product.stock <= 5).length,
+      pendingOrders: 0,
+      rating: workspace?.seller.rating ?? 0,
+    };
+  }
 
   const supabase = await createClient();
 
@@ -78,7 +90,10 @@ export async function getSellerStats(sellerId: string): Promise<SellerStats> {
 }
 
 export async function getSellerProducts(sellerId: string): Promise<SellerProduct[]> {
-  if (!isSupabaseConfigured()) return mock.getMockProducts();
+  if (!isSupabaseConfigured()) {
+    const { getWorkspaceProducts } = await import("@/lib/seller/workspace");
+    return getWorkspaceProducts(sellerId);
+  }
 
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -96,7 +111,10 @@ export async function getSellerProduct(
   sellerId: string,
   productId: string,
 ): Promise<SellerProduct | undefined> {
-  if (!isSupabaseConfigured()) return mock.getMockProduct(productId);
+  if (!isSupabaseConfigured()) {
+    const { getWorkspaceProduct } = await import("@/lib/seller/workspace");
+    return getWorkspaceProduct(sellerId, productId);
+  }
 
   const supabase = await createClient();
   const { data } = await supabase
@@ -111,23 +129,19 @@ export async function getSellerProduct(
 
 export async function getSellerOrders(sellerId: string): Promise<SellerOrder[]> {
   if (!isSupabaseConfigured()) {
-    const staticOrders = mock.getMockOrders();
-    const dynamicOrders = commerceMock.getMockSubOrdersForSeller(sellerId).map(
-      ({ order, subOrder }) => ({
-        id: subOrder.id,
-        orderNumber: order.orderNumber,
-        subOrderId: subOrder.id,
-        status: subOrder.status,
-        customerName: order.shippingAddress.firstName
-          ? `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`.trim()
-          : "Customer",
-        itemCount: subOrder.items.length,
-        subtotal: subOrder.subtotal,
-        commission: subOrder.commission,
-        createdAt: order.createdAt,
-      }),
-    );
-    return [...dynamicOrders, ...staticOrders];
+    return commerceMock.getMockSubOrdersForSeller(sellerId).map(({ order, subOrder }) => ({
+      id: subOrder.id,
+      orderNumber: order.orderNumber,
+      subOrderId: subOrder.id,
+      status: subOrder.status,
+      customerName: order.shippingAddress.firstName
+        ? `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`.trim()
+        : "Customer",
+      itemCount: subOrder.items.length,
+      subtotal: subOrder.subtotal,
+      commission: subOrder.commission,
+      createdAt: order.createdAt,
+    }));
   }
 
   const supabase = await createClient();
@@ -162,7 +176,7 @@ export async function getSellerOrderDetail(
   sellerId: string,
   subOrderId: string,
 ): Promise<SellerOrderDetail | undefined> {
-  if (!isSupabaseConfigured()) return mock.getMockOrder(subOrderId);
+  if (!isSupabaseConfigured()) return undefined;
 
   const supabase = await createClient();
   const { data } = await supabase
@@ -208,9 +222,7 @@ export async function getSellerOrderDetail(
 }
 
 export async function getSellerPayouts(_sellerId: string): Promise<SellerPayout[]> {
-  if (!isSupabaseConfigured()) return mock.getMockPayouts();
-  // Payouts table will be wired in Milestone 6
-  return mock.getMockPayouts();
+  return [];
 }
 
 export async function getLowStockProducts(sellerId: string): Promise<SellerProduct[]> {

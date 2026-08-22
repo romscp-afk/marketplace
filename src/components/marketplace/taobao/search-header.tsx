@@ -46,38 +46,40 @@ export function TaobaoSearchHeader() {
   };
 
   return (
-    <header className="bg-background border-b border-border">
-      <div className="mx-auto max-w-7xl px-4 pt-4 pb-3">
-        <div className="flex items-center gap-6">
+    <header className="bg-surface border-b border-border">
+      <div className="mx-auto max-w-[1200px] px-3 pt-3 pb-0">
+        <div className="flex items-center gap-5">
           <BrandLogo height={36} priority />
 
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <form onSubmit={handleSearch} className="flex" role="search">
-              <label htmlFor="taobao-search" className="sr-only">
+              <label htmlFor="mic-search" className="sr-only">
                 Search products
               </label>
-              <input
-                id="taobao-search"
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search for products, brands and more"
-                className="border-cart h-10 min-w-0 flex-1 rounded-l border-2 border-r-0 bg-surface px-4 text-sm focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-cart hover:bg-cart/90 shrink-0 rounded-r px-6 text-sm font-semibold text-white transition-colors"
-              >
-                Search
-              </button>
+              <div className="border-header flex h-10 min-w-0 flex-1 overflow-hidden rounded-sm border-2">
+                <input
+                  id="mic-search"
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Enter a keyword to search products"
+                  className="min-w-0 flex-1 bg-surface px-4 text-sm focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="bg-header hover:bg-primary-dark shrink-0 px-6 text-sm font-semibold text-white transition-colors"
+                >
+                  Search
+                </button>
+              </div>
             </form>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pb-1 text-xs">
               <span className="text-muted">Hot:</span>
               {marketplaceUi.trendingSearches.slice(0, 6).map((term) => (
                 <Link
                   key={term}
                   href={`/search?q=${encodeURIComponent(term)}`}
-                  className="text-primary hover:underline"
+                  className="text-muted hover:text-primary"
                 >
                   {term}
                 </Link>
@@ -85,39 +87,60 @@ export function TaobaoSearchHeader() {
             </div>
           </div>
 
-          <Link
-            href="/cart"
-            className="hover:text-primary relative flex shrink-0 flex-col items-center gap-0.5 text-foreground transition-colors"
-            aria-label={`Cart${itemCount > 0 ? `, ${itemCount} items` : ""}`}
-          >
-            <ShoppingCart className="h-6 w-6" aria-hidden="true" />
-            <span className="text-xs">Cart</span>
-            {itemCount > 0 ? (
-              <span className="bg-promotional absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold text-white">
-                {itemCount > 99 ? "99+" : itemCount}
-              </span>
-            ) : null}
-          </Link>
+          <div className="flex shrink-0 items-center gap-4">
+            <Link
+              href="/sell"
+              className="hover:text-primary flex flex-col items-center gap-0.5 text-foreground transition-colors"
+            >
+              <Store className="h-5 w-5" aria-hidden="true" />
+              <span className="text-[11px]">Supplier</span>
+            </Link>
+            <Link
+              href="/cart"
+              className="hover:text-primary relative flex flex-col items-center gap-0.5 text-foreground transition-colors"
+              aria-label={`Cart${itemCount > 0 ? `, ${itemCount} items` : ""}`}
+            >
+              <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+              <span className="text-[11px]">Cart</span>
+              {itemCount > 0 ? (
+                <span className="bg-promotional absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[9px] font-bold text-white">
+                  {itemCount > 99 ? "99+" : itemCount}
+                </span>
+              ) : null}
+            </Link>
+          </div>
         </div>
 
         <nav
-          className="mt-3 flex items-center gap-1 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="mt-2 flex items-center gap-0 border-t border-border"
           aria-label="Categories"
         >
+          <Link
+            href="/search"
+            className="bg-header hover:bg-primary-dark mr-2 flex shrink-0 items-center gap-1 px-3 py-2 text-sm font-semibold text-white transition-colors"
+          >
+            All Categories
+          </Link>
           {navigation.categories.map((cat) => (
             <Link
               key={cat.id}
               href={`/categories/${cat.slug}`}
-              className="text-muted hover:text-primary hover:bg-surface shrink-0 rounded px-3 py-1 text-sm transition-colors"
+              className="text-muted hover:text-primary shrink-0 px-3 py-2 text-sm transition-colors"
             >
               {cat.name}
             </Link>
           ))}
           <Link
-            href="/search"
-            className="text-primary shrink-0 px-2 text-sm font-medium hover:underline"
+            href="/sellers"
+            className="text-muted hover:text-primary ml-auto shrink-0 px-3 py-2 text-sm transition-colors"
           >
-            All ›
+            Suppliers
+          </Link>
+          <Link
+            href="/account/login"
+            className="text-muted hover:text-primary shrink-0 px-3 py-2 text-sm transition-colors"
+          >
+            Sign in
           </Link>
         </nav>
       </div>
@@ -127,17 +150,17 @@ export function TaobaoSearchHeader() {
 
 export function TaobaoPromoGrid() {
   return (
-    <div className="bg-surface border-y border-border py-4">
-      <div className="mx-auto grid max-w-7xl grid-cols-4 gap-2 px-4 sm:grid-cols-8">
+    <div className="bg-surface border-y border-border py-3">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-4 gap-1 px-3 sm:grid-cols-8">
         {promoIcons.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.label}
               href={item.href}
-              className="hover:bg-background flex flex-col items-center gap-1.5 rounded px-2 py-2 transition-colors"
+              className="hover:bg-background flex flex-col items-center gap-1 rounded px-2 py-2 transition-colors"
             >
-              <Icon className={`h-6 w-6 ${item.color}`} aria-hidden="true" />
+              <Icon className={`h-5 w-5 ${item.color}`} aria-hidden="true" />
               <span className="text-center text-[11px] text-foreground">{item.label}</span>
             </Link>
           );

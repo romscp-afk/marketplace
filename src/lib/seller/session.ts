@@ -3,7 +3,6 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { getUser, requireAuth } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import type { SellerPortalContext, SellerApplication, SellerRecord } from "@/types/seller";
-import * as mock from "@/lib/seller/mock-data";
 import type { SellerApplicationStatus } from "@/types";
 
 function mapApplication(row: Record<string, unknown>): SellerApplication {
@@ -46,14 +45,15 @@ function mapSeller(row: Record<string, unknown>): SellerRecord {
 }
 
 export async function getSellerPortalContext(): Promise<SellerPortalContext | null> {
-  if (!isSupabaseConfigured()) {
-    const user = await getUser();
-    if (!user) return null;
-    return mock.getMockSellerContext(user.id);
-  }
-
   const user = await getUser();
   if (!user) return null;
+
+  if (!isSupabaseConfigured()) {
+    const { isAdmin, isSeller } = await import("@/lib/auth/session");
+    if (!isSeller(user) && !isAdmin(user)) return null;
+    const { getSellerPortalFromWorkspace } = await import("@/lib/seller/workspace");
+    return getSellerPortalFromWorkspace(user);
+  }
 
   const supabase = await createClient();
 
@@ -92,9 +92,6 @@ export async function requireSellerPortal() {
   const ctx = await getSellerPortalContext();
 
   if (!ctx) {
-    if (!isSupabaseConfigured()) {
-      return { user, context: mock.getMockSellerContext(user.id) };
-    }
     redirect("/seller/apply");
   }
 
@@ -109,9 +106,6 @@ export async function requireApprovedSeller() {
   }
 
   if (!context.seller) {
-    if (!isSupabaseConfigured()) {
-      return { user, context: { ...context, seller: mock.MOCK_SELLER } };
-    }
     redirect("/seller/apply/status");
   }
 
@@ -119,7 +113,10 @@ export async function requireApprovedSeller() {
 }
 
 export async function getSellerApplication(userId: string): Promise<SellerApplication | undefined> {
-  if (!isSupabaseConfigured()) return mock.getMockApplication(userId);
+  if (!isSupabaseConfigured()) {
+    const { getWorkspaceByUserId } = await import("@/lib/seller/workspace");
+    return getWorkspaceByUserId(userId)?.application;
+  }
 
   const supabase = await createClient();
   const { data } = await supabase

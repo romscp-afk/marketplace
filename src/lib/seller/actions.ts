@@ -8,7 +8,6 @@ import { requireAuth } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { slugify, generateId } from "@/lib/utils";
 import { getSellerApplication } from "@/lib/seller/session";
-import * as mock from "@/lib/seller/mock-data";
 import type { SellerProduct } from "@/types/seller";
 import type { ProductStatus } from "@/types";
 
@@ -48,6 +47,11 @@ const productSchema = z.object({
   sku: z.string().optional(),
   stock: z.coerce.number().int().min(0, "Stock must be 0 or more"),
   status: z.enum(["draft", "review", "active", "archived", "out_of_stock"]),
+  imageUrl: z
+    .string()
+    .trim()
+    .optional()
+    .refine((value) => !value || /^https?:\/\/.+/i.test(value), "Enter a valid image URL"),
 });
 
 export async function submitSellerApplication(
@@ -84,21 +88,20 @@ export async function submitSellerApplication(
   }
 
   if (!isSupabaseConfigured()) {
-    mock.saveMockApplication({
-      id: "mock-app-1",
-      userId: user.id,
-      status: "submitted",
+    const { saveWorkspaceApplication } = await import("@/lib/seller/workspace");
+    saveWorkspaceApplication(user, {
+      status: "approved",
       storeName: parsed.data.storeName,
       storeDescription: parsed.data.storeDescription,
       businessName: parsed.data.businessName,
       businessRegistration: parsed.data.businessRegistration,
       categories: parsed.data.categories,
       submittedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-    revalidatePath("/seller/apply/status");
-    redirect("/seller/apply/status");
+    revalidatePath("/seller");
+    revalidatePath("/");
+    redirect("/seller/dashboard");
   }
 
   const supabase = await createClient();
@@ -147,6 +150,7 @@ export async function saveSellerProduct(
     sku: formData.get("sku") || undefined,
     stock: formData.get("stock"),
     status: formData.get("status"),
+    imageUrl: formData.get("imageUrl") || undefined,
   });
 
   if (!parsed.success) {
@@ -157,27 +161,37 @@ export async function saveSellerProduct(
   const now = new Date().toISOString();
 
   if (!isSupabaseConfigured()) {
+    const { getOrCreateWorkspace, saveWorkspaceProduct } = await import("@/lib/seller/workspace");
+    const { seedCategories } = await import("@/data/seed");
+    const workspace = getOrCreateWorkspace(user);
+    const category = seedCategories.find(
+      (item) => item.id === parsed.data.categoryId || item.slug === parsed.data.categoryId,
+    );
     const product: SellerProduct = {
       id: productId ?? generateId(),
-      sellerId: mock.MOCK_SELLER.id,
+      sellerId: workspace.seller.id,
       title: parsed.data.title,
       slug,
       description: parsed.data.description,
       price: parsed.data.price,
       compareAtPrice: parsed.data.compareAtPrice,
       costPrice: parsed.data.costPrice,
-      currency: "USD",
+      currency: "SGD",
       sku: parsed.data.sku,
       stock: parsed.data.stock,
       status: parsed.data.status as ProductStatus,
       categoryId: parsed.data.categoryId,
-      categoryName: "Fashion",
+      categoryName: category?.name ?? "General",
+      imageUrl: parsed.data.imageUrl || undefined,
       createdAt: now,
       updatedAt: now,
     };
-    mock.saveMockProduct(product);
+    const saved = saveWorkspaceProduct(workspace.seller.id, product);
     revalidatePath("/seller/products");
-    redirect(productId ? `/seller/products/${productId}/edit` : "/seller/products");
+    revalidatePath("/");
+    revalidatePath("/search");
+    revalidatePath("/sellers");
+    redirect(productId ? `/seller/products/${saved.id}/edit` : "/seller/products");
   }
 
   // Supabase path — requires approved seller
@@ -253,9 +267,11 @@ export async function updateStoreProfile(
   if (!name?.trim()) return { success: false, error: "Store name required" };
 
   if (!isSupabaseConfigured()) {
-    mock.MOCK_SELLER.store.name = name;
-    mock.MOCK_SELLER.store.description = description;
+    const { updateWorkspaceStore } = await import("@/lib/seller/workspace");
+    const user = await requireAuth();
+    updateWorkspaceStore(user.id, name, description);
     revalidatePath("/seller/store");
+    revalidatePath("/sellers");
     return { success: true };
   }
 
